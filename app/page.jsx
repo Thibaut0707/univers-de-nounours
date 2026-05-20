@@ -90,7 +90,7 @@ export default function HomePage() {
 
             <p className="text-zinc-300 mb-10">
               Tout un univers 🪐 a été créé pour toi, jolie Nounours 🧸🫂❤️
-Ses portes s’ouvriront le jour J…
+Ces portes s’ouvriront le jour J…
 et ce jour-là, tu comprendras que chaque étoile, chaque lumière et chaque battement y portaient déjà ton nom ✨❤️
             </p>
 
