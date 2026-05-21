@@ -15,12 +15,12 @@ export default function HomePage() {
       const now = new Date();
       const difference = BIRTHDAY_DATE - now;
 
-   if (difference <= 0) {
-  setIsUnlocked(true);
-  setTimeLeft(null);
-  setShowFireworks(true);
-  return;
-}
+      if (difference <= 0) {
+        setIsUnlocked(true);
+        setTimeLeft(null);
+        setShowFireworks(true);
+        return;
+      }
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
@@ -36,41 +36,65 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const audio = document.getElementById("countdown-music");
+
+    if (!audio) return;
+
+    audio.volume = 0.35;
+
+    const playMusic = () => {
+      audio.play().catch(() => {});
+    };
+
+    window.addEventListener("click", playMusic, { once: true });
+    window.addEventListener("touchstart", playMusic, { once: true });
+
+    return () => {
+      window.removeEventListener("click", playMusic);
+      window.removeEventListener("touchstart", playMusic);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
+      <audio id="countdown-music" autoPlay loop>
+        <source src="/countdown.mp3" type="audio/mpeg" />
+      </audio>
+
       <div className="absolute inset-0 bg-gradient-to-b from-[#21002f] via-black to-black" />
 
       {showFireworks && (
-  <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-    {[...Array(60)].map((_, index) => (
-      <motion.div
-        key={index}
-        initial={{
-          opacity: 1,
-          scale: 0,
-          x: "50vw",
-          y: "50vh",
-        }}
-        animate={{
-          opacity: [1, 1, 0],
-          scale: [0, 1.5, 0.2],
-          x: `${Math.random() * 100}vw`,
-          y: `${Math.random() * 100}vh`,
-        }}
-        transition={{
-          duration: 1.8,
-          delay: Math.random() * 0.8,
-          ease: "easeOut",
-        }}
-        className="absolute text-3xl"
-      >
-        {["✨", "🎆", "🎇", "💖", "🦋", "🎉"][
-          Math.floor(Math.random() * 6)
-        ]}
-      </motion.div>
-    ))}
-  </div>
-)}
+        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+          {[...Array(60)].map((_, index) => (
+            <motion.div
+              key={index}
+              initial={{
+                opacity: 1,
+                scale: 0,
+                x: "50vw",
+                y: "50vh",
+              }}
+              animate={{
+                opacity: [1, 1, 0],
+                scale: [0, 1.5, 0.2],
+                x: `${Math.random() * 100}vw`,
+                y: `${Math.random() * 100}vh`,
+              }}
+              transition={{
+                duration: 1.8,
+                delay: Math.random() * 0.8,
+                ease: "easeOut",
+              }}
+              className="absolute text-3xl"
+            >
+              {["✨", "🎆", "🎇", "💖", "🦋", "🎉"][
+                Math.floor(Math.random() * 6)
+              ]}
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -88,10 +112,12 @@ export default function HomePage() {
               Une surprise t’attend bientôt 🎁
             </h1>
 
-            <p className="text-zinc-300 mb-10">
-              Tout un univers 🪐 a été créé pour toi, jolie Nounours 🧸🫂❤️
+            <p className="text-zinc-300 mb-10 whitespace-pre-line">
+              {`Tout un univers 🪐 a été créé pour toi, jolie Nounours 🧸🫂❤️
+
 Ces portes s’ouvriront le jour J…
-et ce jour-là, tu comprendras que chaque étoile, chaque lumière et chaque battement y portaient déjà ton nom ✨❤️
+
+Et ce jour-là, tu comprendras que chaque étoile, chaque lumière et chaque battement y portaient déjà ton nom ✨❤️`}
             </p>
 
             {timeLeft && (
@@ -118,9 +144,7 @@ et ce jour-là, tu comprendras que chaque étoile, chaque lumière et chaque bat
               </div>
             )}
 
-            <p className="text-pink-200">
-              Reviens le jour J, Elvira ❤️
-            </p>
+            <p className="text-pink-200">Reviens le jour J, Elvira ❤️</p>
           </>
         ) : (
           <>
@@ -139,8 +163,6 @@ et ce jour-là, tu comprendras que chaque étoile, chaque lumière et chaque bat
               >
                 Entrer dans mon univers 🦋
               </a>
-
-             
             </div>
           </>
         )}

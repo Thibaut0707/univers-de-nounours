@@ -710,7 +710,7 @@ function MemoryBookModal({ messages, onClose }) {
             onFlip={playPageSound}
             className="shadow-[0_0_80px_rgba(255,105,180,0.2)]"
           >
-            <div className="bg-[#fff7ee] text-zinc-900 p-10 rounded-l-xl flex flex-col justify-center items-center text-center relative overflow-hidden">
+            <div className="bg-[#fff7ee] text-zinc-900 p-10 rounded-l-xl flex flex-col justify-center items-center text-center relative h-auto">
               <div className="absolute inset-0 bg-gradient-to-b from-pink-100 to-white opacity-70" />
 
               <div className="relative z-10">
@@ -741,7 +741,7 @@ function MemoryBookModal({ messages, onClose }) {
             {pages.map((page, index) => (
               <div
                 key={`${page.type || page.title}-${index}`}
-                className="bg-[#fff7ee] text-zinc-900 p-8 overflow-hidden"
+                className="bg-[#fff7ee] text-zinc-900 p-8 h-auto"
               >
                 {page.type === "intro" && (
                   <div className="h-full flex flex-col justify-center text-center">
@@ -773,9 +773,11 @@ function MemoryBookModal({ messages, onClose }) {
                       {page.title}
                     </h3>
 
-                    <p className="text-zinc-700 leading-relaxed whitespace-pre-wrap text-lg">
-                      {page.text}
-                    </p>
+                    <div className="overflow-y-auto max-h-[420px] pr-3">
+  <p className="text-zinc-700 leading-relaxed whitespace-pre-line text-lg">
+    {page.text}
+  </p>
+</div>
 
                     <div className="mt-auto text-right text-zinc-400 text-sm">
                       Page {index + 1}
@@ -784,7 +786,7 @@ function MemoryBookModal({ messages, onClose }) {
                 )}
 
                 {page.type === "media" && (
-                  <div className="h-full flex flex-col">
+                  <div className="h-full flex flex-col overflow-hidden">
                     <p className="text-sm text-pink-500 mb-4">
                       {page.message.name}
                     </p>
