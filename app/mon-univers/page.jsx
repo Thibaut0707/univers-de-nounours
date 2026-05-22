@@ -987,7 +987,266 @@ function MemoryGlobe({ messages, onOpenMessage }) {
     </div>
   );
 }
+function EternalMemoryGate({ onClose }) {
+  const [gateOpened, setGateOpened] = useState(false);
+  const [currentMemory, setCurrentMemory] = useState(0);
+  const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [isChangingMemory, setIsChangingMemory] = useState(false);
 
+  const memories = [
+    { type: "image", src: "/ella.jpg" },
+    { type: "video", src: "/ella1.mp4" },
+    { type: "image", src: "/ella1.jpg" },
+    { type: "video", src: "/ella2.mp4" },
+    { type: "image", src: "/ella2.jpg" },
+    { type: "video", src: "/ella3.mp4" },
+    { type: "image", src: "/ella3.jpg" },
+    { type: "video", src: "/ella4.mp4" },
+    { type: "video", src: "/ella5.mp4" },
+    { type: "video", src: "/ella6.mp4" },
+  ];
+
+  const isLastMemory = currentMemory === memories.length - 1;
+  const activeMemory = memories[currentMemory];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setGateOpened(true);
+    }, 9000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  function goNextMemory() {
+    if (isChangingMemory) return;
+
+    setIsChangingMemory(true);
+
+    setTimeout(() => {
+      if (isLastMemory) {
+        setShowFinalMessage(true);
+      } else {
+        setCurrentMemory((prev) => prev + 1);
+      }
+
+      setTimeout(() => {
+        setIsChangingMemory(false);
+      }, 400);
+    }, 3500);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[999] bg-black overflow-hidden"
+    >
+      <div className="absolute inset-0">
+        <img
+          src={gateOpened ? "/ella-heaven.jpg" : "/ella-gate.jpg"}
+          alt="Souvenir éternel"
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-yellow-100/10 to-black/40" />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0.45, scale: 0.8 }}
+        animate={{ opacity: [0.5, 1, 0.65], scale: [0.9, 1.35, 1] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-white/50 blur-[140px]"
+      />
+
+      {[...Array(10)].map((_, index) => (
+        <motion.div
+          key={index}
+          initial={{
+            x: "-15vw",
+            y: `${18 + Math.random() * 45}vh`,
+            opacity: 0,
+            scale: 0.7 + Math.random() * 0.6,
+          }}
+          animate={{
+            x: "115vw",
+            y: `${12 + Math.random() * 45}vh`,
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 32 + Math.random() * 14,
+            repeat: Infinity,
+            delay: index * 2,
+            ease: "linear",
+          }}
+          className="absolute z-30 text-4xl md:text-6xl"
+        >
+          🕊️
+        </motion.div>
+      ))}
+
+      {!gateOpened && (
+        <>
+          <motion.div
+            initial={{ x: 0 }}
+            animate={{ x: "-60vw" }}
+            transition={{ duration: 7.5, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute left-0 top-0 z-40 h-full w-1/2 bg-gradient-to-r from-[#3b2507]/95 via-[#b8862b]/90 to-[#ffe39a]/90 border-r-4 border-yellow-100 shadow-[0_0_120px_rgba(255,215,120,0.9)]"
+          >
+            <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
+            <div className="absolute inset-16 border-2 border-yellow-200/70 rounded-t-full" />
+
+            {[...Array(9)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute top-20 bottom-20 w-[4px] bg-yellow-100/80 rounded-full"
+                style={{ left: `${12 + i * 10}%` }}
+              />
+            ))}
+
+            <div className="absolute left-1/2 top-[42%] w-52 h-52 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-yellow-100/80" />
+            <div className="absolute left-1/2 top-[42%] w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-yellow-100/70" />
+          </motion.div>
+
+          <motion.div
+            initial={{ x: 0 }}
+            animate={{ x: "60vw" }}
+            transition={{ duration: 7.5, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute right-0 top-0 z-40 h-full w-1/2 bg-gradient-to-l from-[#3b2507]/95 via-[#b8862b]/90 to-[#ffe39a]/90 border-l-4 border-yellow-100 shadow-[0_0_120px_rgba(255,215,120,0.9)]"
+          >
+            <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
+            <div className="absolute inset-16 border-2 border-yellow-200/70 rounded-t-full" />
+
+            {[...Array(9)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute top-20 bottom-20 w-[4px] bg-yellow-100/80 rounded-full"
+                style={{ left: `${12 + i * 10}%` }}
+              />
+            ))}
+
+            <div className="absolute left-1/2 top-[42%] w-52 h-52 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-yellow-100/80" />
+            <div className="absolute left-1/2 top-[42%] w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-yellow-100/70" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 2 }}
+            className="absolute inset-0 z-50 flex items-center justify-center text-center px-6"
+          >
+            <div>
+              <h1 className="text-7xl md:text-9xl font-serif text-white mb-6 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
+                Ella 🕊️
+              </h1>
+
+              <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-sm font-bold drop-shadow-[0_0_20px_rgba(255,240,180,1)]">
+                Lumière Éternelle
+              </p>
+            </div>
+          </motion.div>
+        </>
+      )}
+
+      {gateOpened && !showFinalMessage && !isChangingMemory && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="absolute inset-0 z-50 flex items-center justify-center px-5 py-8"
+        >
+          <div className="w-full max-w-5xl text-center">
+            <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-xs md:text-sm font-bold mb-4 drop-shadow-[0_0_15px_rgba(255,240,180,1)]">
+              Souvenir {currentMemory + 1} sur {memories.length}
+            </p>
+
+            <h1 className="text-6xl md:text-8xl font-serif text-white mb-8 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
+              Ella 🕊️
+            </h1>
+
+            <AnimatePresence mode="wait">
+              {!isChangingMemory && (
+                <motion.div
+                  key={currentMemory}
+                  initial={{ opacity: 0, scale: 0.55, y: 80 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.45, y: -80 }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  className="bg-black/20 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-4 md:p-6 shadow-[0_0_80px_rgba(255,255,255,0.25)]"
+                >
+                  {activeMemory.type === "image" ? (
+                    <img
+                      src={activeMemory.src}
+                      alt="Souvenir Ella"
+                      className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
+                    />
+                  ) : (
+                    <video
+                      src={activeMemory.src}
+                      controls
+                      autoPlay
+                      className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
+                    />
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <button
+              onClick={goNextMemory}
+              className="mt-8 bg-white text-black px-8 py-4 rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(255,255,255,0.6)]"
+            >
+              {isLastMemory
+                ? "Découvrir le message d’Ella 🕊️"
+                : "Souvenir suivant →"}
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {showFinalMessage && (
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute inset-0 z-60 flex items-center justify-center px-6"
+        >
+          <div className="max-w-3xl text-center bg-black/15 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-8 md:p-12 shadow-[0_0_100px_rgba(255,255,255,0.35)]">
+            <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-sm font-bold mb-6 drop-shadow-[0_0_18px_rgba(255,240,180,1)]">
+              Lumière Éternelle
+            </p>
+
+            <h1 className="text-7xl md:text-9xl font-serif text-white mb-10 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
+              Ella 🕊️
+            </h1>
+
+            <p className="text-white text-lg md:text-xl font-medium leading-relaxed whitespace-pre-line drop-shadow-[0_0_12px_rgba(0,0,0,1)]">
+{`Elvira…
+
+Même si certaines personnes quittent ce monde,
+leur amour, leurs rires
+et les souvenirs qu’elles ont laissés
+continuent de vivre en nous.
+
+Certaines âmes deviennent éternelles.
+
+Et tant qu’on se souvient d’elles,
+elles ne disparaissent jamais vraiment ✨
+
+Ella 🕊️`}
+            </p>
+
+            <button
+              onClick={onClose}
+              className="mt-10 bg-white text-black px-8 py-4 rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(255,255,255,0.6)]"
+            >
+              Revenir au jardin 🦋
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
 export default function MonUniversPage() {
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const [showMemoryBook, setShowMemoryBook] = useState(false);
@@ -1004,6 +1263,7 @@ export default function MonUniversPage() {
   const [hasEntered, setHasEntered] = useState(false);
 
   const [introStep, setIntroStep] = useState(0);
+  const [showEllaGate, setShowEllaGate] = useState(false);
 
   const introSteps = [
     {
@@ -1333,6 +1593,29 @@ export default function MonUniversPage() {
               Un papillon spécial déposé pour Nounours.
             </p>
           </button>
+
+          <motion.div
+  initial={{ opacity: 0, scale: 0.92 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ delay: 0.3 }}
+  className="max-w-3xl mx-auto mb-16"
+>
+  <button
+    onClick={() => setShowEllaGate(true)}
+    className="w-full bg-white/10 border border-yellow-200/40 hover:border-yellow-200 rounded-3xl p-10 text-center backdrop-blur-md hover:scale-[1.02] transition shadow-[0_0_50px_rgba(255,215,120,0.15)]"
+  >
+    <div className="text-6xl mb-5">🕊️</div>
+
+    <h2 className="text-3xl font-serif mb-3 text-yellow-100">
+      Éternelle lumière 🤍🕊️
+    </h2>
+
+    <p className="text-yellow-50/80">
+      Une présence éternel qui continue de briller ✨🌟.
+    </p>
+  </button>
+</motion.div>
+
         </motion.div>
 
         {loading && (
@@ -1477,6 +1760,15 @@ export default function MonUniversPage() {
           />
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+  {showEllaGate && (
+    <EternalMemoryGate
+      onClose={() => setShowEllaGate(false)}
+    />
+  )}
+</AnimatePresence>
+
     </main>
   );
 }
