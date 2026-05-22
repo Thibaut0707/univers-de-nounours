@@ -1133,7 +1133,9 @@ function EternalMemoryGate({ onClose }) {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 2 }}
+            transition={{ delay: 1, 
+              duration: 7,
+            ease: [0.16, 1, 0.3, 1], }}
             className="absolute inset-0 z-50 flex items-center justify-center text-center px-6"
           >
             <div>
@@ -1171,7 +1173,7 @@ function EternalMemoryGate({ onClose }) {
                   initial={{ opacity: 0, scale: 0.55, y: 80 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.45, y: -80 }}
-                  transition={{ duration: 0.7, ease: "easeInOut" }}
+                  transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], }}
                   className="bg-black/20 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-4 md:p-6 shadow-[0_0_80px_rgba(255,255,255,0.25)]"
                 >
                   {activeMemory.type === "image" ? (
