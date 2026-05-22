@@ -404,7 +404,7 @@ export default function ProchesPage() {
               disabled={loading}
               className="w-full bg-white text-black rounded-full py-4 text-lg font-medium hover:scale-[1.02] transition disabled:opacity-50"
             >
-              {loading ? "Dépôt du papillon..." : "Déposer mon papillon"}
+              {loading ? "Dépôt du papillon..." : "Déposer mon butterfly"}
             </button>
           </form>
         </div>

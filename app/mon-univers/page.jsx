@@ -1032,7 +1032,7 @@ function EternalMemoryGate({ onClose }) {
       setTimeout(() => {
         setIsChangingMemory(false);
       }, 400);
-    }, 3500);
+    }, 1500);
   }
 
   return (
@@ -1171,7 +1171,7 @@ function EternalMemoryGate({ onClose }) {
                   initial={{ opacity: 0, scale: 0.55, y: 80 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.45, y: -80 }}
-                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.7, ease: "easeInOut" }}
                   className="bg-black/20 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-4 md:p-6 shadow-[0_0_80px_rgba(255,255,255,0.25)]"
                 >
                   {activeMemory.type === "image" ? (
@@ -1278,7 +1278,7 @@ export default function MonUniversPage() {
     },
     {
       title: "Un jardin secret",
-      text: "Chaque papillon que tu verras porte une histoire, une pensée ou une émotion...appuie dessus pour découvrir ce qu'il cache.",
+      text: "Chaque butterfly  que tu verras porte une histoire, une pensée ou une émotion...appuie dessus pour découvrir ce qu'il cache.",
       emoji: "🌙",
     },
     {
@@ -1565,11 +1565,11 @@ export default function MonUniversPage() {
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             className="text-4xl sm:text-5xl md:text-7xl font-serif mb-8"
           >
-            Ton jardin de papillons 🦋
+            Ton jardin de butterfly  🦋
           </motion.h1>
 
           <p className="text-zinc-300 text-lg leading-relaxed max-w-2xl mx-auto">
-            Chaque papillon contient un message venant d’une personne qui t’aime.
+            Chaque butterfly  contient un message venant d’une personne qui t’aime.
           </p>
         </motion.div>
 
@@ -1590,7 +1590,7 @@ export default function MonUniversPage() {
             </h2>
 
             <p className="text-pink-100">
-              Un papillon spécial déposé pour Nounours.
+              Un butterfly  spécial déposé pour Nounours.
             </p>
           </button>
 
@@ -1620,7 +1620,7 @@ export default function MonUniversPage() {
 
         {loading && (
           <div className="text-center text-zinc-400">
-            Chargement des papillons...
+            Chargement des butterfly...
           </div>
         )}
 
@@ -1632,14 +1632,14 @@ export default function MonUniversPage() {
               </p>
 
               <h2 className="text-5xl font-bold mt-3">
-                {messages.length} papillons 🦋
+                {messages.length} butterfly  🦋
               </h2>
             </div>
 
             {messages.length === 0 ? (
               <div className="max-w-xl mx-auto text-center bg-white/5 border border-white/10 rounded-3xl p-8">
                 <p className="text-zinc-300">
-                  Aucun papillon n’a encore été déposé dans ton jardin.
+                  Aucun butterfly  n’a encore été déposé dans ton jardin.
                 </p>
               </div>
             ) : (
@@ -1679,7 +1679,7 @@ export default function MonUniversPage() {
                       </p>
 
                       <p className="text-zinc-400 text-xs mt-2">
-                        Papillon #{index + 1}
+                        butterfly  #{index + 1}
                       </p>
                     </motion.button>
                   );
@@ -1711,7 +1711,7 @@ export default function MonUniversPage() {
           </h2>
 
           <p className="text-zinc-300">
-            Tous les papillons réunis dans un seul livre.
+            Tous les butterfly réunis dans un seul livre.
           </p>
         </motion.button>
       </div>
