@@ -1012,7 +1012,7 @@ function EternalMemoryGate({ onClose }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setGateOpened(true);
-    }, 9000);
+    }, 14000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -1091,7 +1091,7 @@ function EternalMemoryGate({ onClose }) {
           <motion.div
             initial={{ x: 0 }}
             animate={{ x: "-60vw" }}
-            transition={{ duration: 7.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 14, ease: "linear" }}
             className="absolute left-0 top-0 z-40 h-full w-1/2 bg-gradient-to-r from-[#3b2507]/95 via-[#b8862b]/90 to-[#ffe39a]/90 border-r-4 border-yellow-100 shadow-[0_0_120px_rgba(255,215,120,0.9)]"
           >
             <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
@@ -1112,7 +1112,7 @@ function EternalMemoryGate({ onClose }) {
           <motion.div
             initial={{ x: 0 }}
             animate={{ x: "60vw" }}
-            transition={{ duration: 7.5, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 14, ease: "linear" }}
             className="absolute right-0 top-0 z-40 h-full w-1/2 bg-gradient-to-l from-[#3b2507]/95 via-[#b8862b]/90 to-[#ffe39a]/90 border-l-4 border-yellow-100 shadow-[0_0_120px_rgba(255,215,120,0.9)]"
           >
             <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
