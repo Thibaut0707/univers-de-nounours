@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef  } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { db } from "@/lib/firebase";
 import {
@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import bcrypt from "bcryptjs";
 import HTMLFlipBook from "react-pageflip";
+
 
 const TEMP_SECRET_CODE = "nounours2026";
 
@@ -457,6 +458,30 @@ function MessageModal({ openedMessage, onClose }) {
                           className="rounded-2xl w-full max-w-2xl mx-auto max-h-[45vh] object-contain mb-4"
                         />
                       )}
+                      {media.type === "audio" && (
+  <div className="mb-4">
+  <audio
+    src={media.url}
+    controls
+    className="w-full"
+    onPlay={() => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.12;
+      }
+    }}
+    onPause={() => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5;
+      }
+    }}
+    onEnded={() => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5;
+      }
+    }}
+  />
+</div>
+)}
 
                       {media.caption && (
                         <p className="text-zinc-300 leading-relaxed whitespace-pre-wrap">
@@ -987,8 +1012,10 @@ function MemoryGlobe({ messages, onOpenMessage }) {
     </div>
   );
 }
+
 function EternalMemoryGate({ onClose }) {
   const [gateOpened, setGateOpened] = useState(false);
+  const [showEllaIntro, setShowEllaIntro] = useState(false);
   const [currentMemory, setCurrentMemory] = useState(0);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const [isChangingMemory, setIsChangingMemory] = useState(false);
@@ -1004,17 +1031,35 @@ function EternalMemoryGate({ onClose }) {
     { type: "video", src: "/ella4.mp4" },
     { type: "video", src: "/ella5.mp4" },
     { type: "video", src: "/ella6.mp4" },
+    { type: "image", src: "/ella4.jpg" },
   ];
 
   const isLastMemory = currentMemory === memories.length - 1;
   const activeMemory = memories[currentMemory];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = oldOverflow;
+    };
+  }, []);
+
+  useEffect(() => {
+    const gateTimer = setTimeout(() => {
       setGateOpened(true);
+      setShowEllaIntro(true);
     }, 14000);
 
-    return () => clearTimeout(timer);
+    const introTimer = setTimeout(() => {
+      setShowEllaIntro(false);
+    }, 18500);
+
+    return () => {
+      clearTimeout(gateTimer);
+      clearTimeout(introTimer);
+    };
   }, []);
 
   function goNextMemory() {
@@ -1040,7 +1085,7 @@ function EternalMemoryGate({ onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[999] bg-black overflow-hidden"
+      className="fixed inset-0 z-[9999] bg-black overflow-hidden overscroll-contain"
     >
       <div className="absolute inset-0">
         <img
@@ -1096,7 +1141,6 @@ function EternalMemoryGate({ onClose }) {
           >
             <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
             <div className="absolute inset-16 border-2 border-yellow-200/70 rounded-t-full" />
-
             {[...Array(9)].map((_, i) => (
               <div
                 key={i}
@@ -1104,7 +1148,6 @@ function EternalMemoryGate({ onClose }) {
                 style={{ left: `${12 + i * 10}%` }}
               />
             ))}
-
             <div className="absolute left-1/2 top-[42%] w-52 h-52 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-yellow-100/80" />
             <div className="absolute left-1/2 top-[42%] w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-yellow-100/70" />
           </motion.div>
@@ -1117,7 +1160,6 @@ function EternalMemoryGate({ onClose }) {
           >
             <div className="absolute inset-8 border-4 border-yellow-100/80 rounded-t-full" />
             <div className="absolute inset-16 border-2 border-yellow-200/70 rounded-t-full" />
-
             {[...Array(9)].map((_, i) => (
               <div
                 key={i}
@@ -1125,37 +1167,49 @@ function EternalMemoryGate({ onClose }) {
                 style={{ left: `${12 + i * 10}%` }}
               />
             ))}
-
             <div className="absolute left-1/2 top-[42%] w-52 h-52 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-yellow-100/80" />
             <div className="absolute left-1/2 top-[42%] w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-yellow-100/70" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, 
-              duration: 7,
-            ease: [0.16, 1, 0.3, 1], }}
-            className="absolute inset-0 z-50 flex items-center justify-center text-center px-6"
-          >
-            <div>
-              <h1 className="text-7xl md:text-9xl font-serif text-white mb-6 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
-                Ella 🕊️
-              </h1>
-
-              <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-sm font-bold drop-shadow-[0_0_20px_rgba(255,240,180,1)]">
-                Lumière Éternelle
-              </p>
-            </div>
           </motion.div>
         </>
       )}
 
-      {gateOpened && !showFinalMessage && !isChangingMemory && (
+      {gateOpened && showEllaIntro && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.8, ease: "easeOut" }}
+          className="absolute inset-0 z-50 flex items-center justify-center text-center px-6"
+        >
+          <div>
+            <motion.div
+              animate={{ y: [0, -14, 0], scale: [1, 1.08, 1] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="text-7xl md:text-8xl mb-8 drop-shadow-[0_0_35px_rgba(255,255,255,1)]"
+            >
+              🕊️
+            </motion.div>
+
+            <h1 className="text-8xl md:text-[10rem] font-serif text-white mb-6 drop-shadow-[0_0_60px_rgba(255,255,255,1)]">
+              ELLA
+            </h1>
+
+            <div className="text-6xl md:text-7xl mb-8 drop-shadow-[0_0_35px_rgba(255,255,255,1)]">
+              🤍
+            </div>
+
+            <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-sm md:text-base font-bold drop-shadow-[0_0_20px_rgba(255,240,180,1)]">
+              Lumière Éternelle
+            </p>
+          </div>
+        </motion.div>
+      )}
+
+      {gateOpened && !showEllaIntro && !showFinalMessage && !isChangingMemory && (
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="absolute inset-0 z-50 flex items-center justify-center px-5 py-8"
+          className="absolute inset-0 z-50 flex items-center justify-center px-5 py-8 overflow-hidden overscroll-contain"
         >
           <div className="w-full max-w-5xl text-center">
             <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-xs md:text-sm font-bold mb-4 drop-shadow-[0_0_15px_rgba(255,240,180,1)]">
@@ -1167,40 +1221,36 @@ function EternalMemoryGate({ onClose }) {
             </h1>
 
             <AnimatePresence mode="wait">
-              {!isChangingMemory && (
-                <motion.div
-                  key={currentMemory}
-                  initial={{ opacity: 0, scale: 0.55, y: 80 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.45, y: -80 }}
-                  transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], }}
-                  className="bg-black/20 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-4 md:p-6 shadow-[0_0_80px_rgba(255,255,255,0.25)]"
-                >
-                  {activeMemory.type === "image" ? (
-                    <img
-                      src={activeMemory.src}
-                      alt="Souvenir Ella"
-                      className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
-                    />
-                  ) : (
-                    <video
-                      src={activeMemory.src}
-                      controls
-                      autoPlay
-                      className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
-                    />
-                  )}
-                </motion.div>
-              )}
+              <motion.div
+                key={currentMemory}
+                initial={{ opacity: 0, scale: 0.55, y: 80 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.45, y: -80 }}
+                transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-black/20 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-4 md:p-6 shadow-[0_0_80px_rgba(255,255,255,0.25)]"
+              >
+                {activeMemory.type === "image" ? (
+                  <img
+                    src={activeMemory.src}
+                    alt="Souvenir Ella"
+                    className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
+                  />
+                ) : (
+                  <video
+                    src={activeMemory.src}
+                    controls
+                    autoPlay
+                    className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
+                  />
+                )}
+              </motion.div>
             </AnimatePresence>
 
             <button
               onClick={goNextMemory}
               className="mt-8 bg-white text-black px-8 py-4 rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(255,255,255,0.6)]"
             >
-              {isLastMemory
-                ? "Découvrir le message d’Ella 🕊️"
-                : "Souvenir suivant →"}
+              {isLastMemory ? "Lumière Éternelle ✨" : "Souvenir suivant →"}
             </button>
           </div>
         </motion.div>
@@ -1249,12 +1299,14 @@ Ella 🕊️`}
     </motion.div>
   );
 }
+
 export default function MonUniversPage() {
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const [showMemoryBook, setShowMemoryBook] = useState(false);
   const [messages, setMessages] = useState([]);
   const [openedMessage, setOpenedMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const audioRef = useRef(null);
 
   const [secretCode, setSecretCode] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -1533,6 +1585,13 @@ export default function MonUniversPage() {
   }
 
   return (
+    <>
+  <audio
+    ref={audioRef}
+    src="/piano.mp3"
+    autoPlay
+    loop
+  />
     <main className="min-h-screen bg-black text-white overflow-hidden relative">
       <div className="absolute inset-0 z-0">
         <img
@@ -1772,5 +1831,6 @@ export default function MonUniversPage() {
 </AnimatePresence>
 
     </main>
+        </>
   );
 }
