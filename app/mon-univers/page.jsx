@@ -339,7 +339,7 @@ function TypewriterText({ text, speed = 45 }) {
   );
 }
 
-function MessageModal({ openedMessage, onClose }) {
+function MessageModal({ openedMessage, onClose, audioRef }) {
   const sections = [
     { key: "wish", title: "✨ Mon souhait pour Nounours 🧸", content: openedMessage.wish },
     { key: "funnyMoment", title: "😂 Nos moments drôles", content: openedMessage.funnyMoment },
@@ -459,24 +459,24 @@ function MessageModal({ openedMessage, onClose }) {
                         />
                       )}
                       {media.type === "audio" && (
-  <div className="mb-4">
+ <div className="mb-4">
   <audio
     src={media.url}
     controls
     className="w-full"
     onPlay={() => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.12;
+      if (audioRef?.current) {
+        audioRef.current.volume = 0.08;
       }
     }}
     onPause={() => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.5;
+      if (audioRef?.current) {
+        audioRef.current.volume = 0.45;
       }
     }}
     onEnded={() => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.5;
+      if (audioRef?.current) {
+        audioRef.current.volume = 0.45;
       }
     }}
   />
@@ -657,14 +657,13 @@ function playPageSound() {
 }
 
 function MemoryBookModal({ messages, onClose }) {
+  const bookRef = useRef(null);
+
   const pages = useMemo(() => {
     const result = [];
 
     messages.forEach((message) => {
-      result.push({
-        type: "intro",
-        message,
-      });
+      result.push({ type: "intro", message });
 
       if (message.wish) result.push({ title: "✨ Souhait", text: message.wish, message });
       if (message.funnyMoment) result.push({ title: "😂 Moment drôle", text: message.funnyMoment, message });
@@ -676,13 +675,9 @@ function MemoryBookModal({ messages, onClose }) {
       if (message.becauseOfYou) result.push({ title: "🙏 Grâce à toi", text: message.becauseOfYou, message });
       if (message.message) result.push({ title: "💌 Message", text: message.message, message });
 
-      if (message.mediaItems && message.mediaItems.length > 0) {
+      if (message.mediaItems?.length > 0) {
         message.mediaItems.forEach((media) => {
-          result.push({
-            type: "media",
-            media,
-            message,
-          });
+          result.push({ type: "media", media, message });
         });
       }
     });
@@ -703,7 +698,7 @@ function MemoryBookModal({ messages, onClose }) {
         <div className="flex items-center justify-between mb-10">
           <div>
             <p className="uppercase tracking-[0.4em] text-pink-400 text-sm mb-3">
-              Un jardin remplie d'amour uniquement pour Nounours
+              Un jardin rempli d’amour uniquement pour Nounours
             </p>
 
             <h1 className="text-4xl md:text-6xl font-serif text-white">
@@ -715,7 +710,6 @@ function MemoryBookModal({ messages, onClose }) {
             type="button"
             onClick={onClose}
             className="text-zinc-400 hover:text-white text-3xl"
-            aria-label="Fermer le livre des souvenirs"
           >
             ✕
           </button>
@@ -723,17 +717,17 @@ function MemoryBookModal({ messages, onClose }) {
 
         <div className="flex justify-center">
           <HTMLFlipBook
-            width={420}
-            height={600}
+            width={360}
+            height={520}
             size="stretch"
             minWidth={300}
-            maxWidth={460}
-            minHeight={480}
-            maxHeight={650}
+            maxWidth={700}
+            minHeight={420}
+            maxHeight={900}
             showCover={true}
-            mobileScrollSupport={true}
-            onFlip={playPageSound}
-            className="shadow-[0_0_80px_rgba(255,105,180,0.2)]"
+            useMouseEvents={false}
+            clickEventForward={false}
+            ref={bookRef}
           >
             <div className="bg-[#fff7ee] text-zinc-900 p-10 rounded-l-xl flex flex-col justify-center items-center text-center relative h-auto">
               <div className="absolute inset-0 bg-gradient-to-b from-pink-100 to-white opacity-70" />
@@ -799,10 +793,10 @@ function MemoryBookModal({ messages, onClose }) {
                     </h3>
 
                     <div className="overflow-y-auto max-h-[420px] pr-3">
-  <p className="text-zinc-700 leading-relaxed whitespace-pre-line text-lg">
-    {page.text}
-  </p>
-</div>
+                      <p className="text-zinc-700 leading-relaxed whitespace-pre-line text-lg">
+                        {page.text}
+                      </p>
+                    </div>
 
                     <div className="mt-auto text-right text-zinc-400 text-sm">
                       Page {index + 1}
@@ -836,6 +830,14 @@ function MemoryBookModal({ messages, onClose }) {
                       />
                     )}
 
+                    {page.media.type === "audio" && (
+                      <audio
+                        src={page.media.url}
+                        controls
+                        className="w-full mb-4"
+                      />
+                    )}
+
                     {page.media.caption && (
                       <p className="text-zinc-700 whitespace-pre-wrap">
                         {page.media.caption}
@@ -860,8 +862,26 @@ function MemoryBookModal({ messages, onClose }) {
           </HTMLFlipBook>
         </div>
 
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            type="button"
+            onClick={() => bookRef.current?.pageFlip().flipPrev()}
+            className="bg-white text-black px-5 py-3 rounded-full hover:scale-105 transition"
+          >
+            ← Page précédente
+          </button>
+
+          <button
+            type="button"
+            onClick={() => bookRef.current?.pageFlip().flipNext()}
+            className="bg-white text-black px-5 py-3 rounded-full hover:scale-105 transition"
+          >
+            Page suivante →
+          </button>
+        </div>
+
         <p className="text-center text-zinc-400 mt-8">
-          Glisse ou clique sur les coins des pages pour tourner le livre.
+          Utilise les boutons pour tourner les pages du livre ✨
         </p>
       </div>
     </motion.div>
@@ -1801,9 +1821,10 @@ export default function MonUniversPage() {
       <AnimatePresence>
         {openedMessage && (
           <MessageModal
-            openedMessage={openedMessage}
-            onClose={() => setOpenedMessage(null)}
-          />
+  openedMessage={openedMessage}
+  onClose={() => setOpenedMessage(null)}
+  audioRef={audioRef}
+/>
         )}
       </AnimatePresence>
 
