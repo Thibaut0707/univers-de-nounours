@@ -863,22 +863,22 @@ function MemoryBookModal({ messages, onClose }) {
         </div>
 
         <div className="flex justify-center gap-4 mt-6">
-          <button
-            type="button"
-            onClick={() => bookRef.current?.pageFlip().flipPrev()}
-            className="bg-white text-black px-5 py-3 rounded-full hover:scale-105 transition"
-          >
-            ← Page précédente
-          </button>
+  <button
+    type="button"
+    onClick={() => bookRef.current?.pageFlip().flipPrev()}
+    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-[0_0_25px_rgba(255,105,180,0.5)] hover:scale-105 transition"
+  >
+    ← Page précédente
+  </button>
 
-          <button
-            type="button"
-            onClick={() => bookRef.current?.pageFlip().flipNext()}
-            className="bg-white text-black px-5 py-3 rounded-full hover:scale-105 transition"
-          >
-            Page suivante →
-          </button>
-        </div>
+  <button
+    type="button"
+    onClick={() => bookRef.current?.pageFlip().flipNext()}
+    className="bg-gradient-to-r from-yellow-300 to-pink-500 text-black px-6 py-3 rounded-full shadow-[0_0_25px_rgba(255,215,120,0.5)] hover:scale-105 transition font-medium"
+  >
+    Page suivante →
+  </button>
+</div>
 
         <p className="text-center text-zinc-400 mt-8">
           Utilise les boutons pour tourner les pages du livre ✨
