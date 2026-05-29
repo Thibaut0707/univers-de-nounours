@@ -1256,12 +1256,26 @@ function EternalMemoryGate({ onClose }) {
                     className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
                   />
                 ) : (
-                  <video
-                    src={activeMemory.src}
-                    controls
-                    autoPlay
-                    className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
-                  />
+                 <video
+  src={activeMemory.src}
+  controls
+  className="w-full max-h-[62vh] object-contain rounded-[1.5rem]"
+  onPlay={() => {
+    if (audioRef?.current) {
+      audioRef.current.pause();
+    }
+  }}
+  onPause={() => {
+    if (audioRef?.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  }}
+  onEnded={() => {
+    if (audioRef?.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  }}
+/>
                 )}
               </motion.div>
             </AnimatePresence>
@@ -1545,7 +1559,7 @@ export default function MonUniversPage() {
           <img
             src="/nounours-bg.jpg"
             alt="Nounours"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover md:object-center object-top opacity-40"
           />
 
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
