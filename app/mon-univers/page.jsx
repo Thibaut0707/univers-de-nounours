@@ -1308,17 +1308,25 @@ function EternalMemoryGate({ onClose }) {
             <p className="text-white text-lg md:text-xl font-medium leading-relaxed whitespace-pre-line drop-shadow-[0_0_12px_rgba(0,0,0,1)]">
 {`Elvira…
 
-Même si certaines personnes quittent ce monde,
-leur amour, leurs rires
-et les souvenirs qu’elles ont laissés
-continuent de vivre en nous.
+Certaines personnes deviennent
+bien plus que des souvenirs.
 
-Certaines âmes deviennent éternelles.
+Elles deviennent une lumière
+qui continue de nous accompagner,
+même quand nos yeux ne peuvent plus les voir.
 
-Et tant qu’on se souvient d’elles,
-elles ne disparaissent jamais vraiment ✨
+Ella fait partie de ces âmes rares…
+de celles qu’on n’oublie jamais.
 
-Ella 🕊️`}
+À travers chaque rire,
+chaque moment partagé,
+chaque photo et chaque souvenir,
+elle continue d’exister un peu avec nous. ✨
+
+Et tant que son nom sera prononcé avec amour,
+sa lumière ne s’éteindra jamais.
+
+Ella 🕊️🤍`}
             </p>
 
             <button
