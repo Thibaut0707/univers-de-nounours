@@ -299,7 +299,7 @@ function MagicCursorTrail() {
   );
 }
 
-function TypewriterText({ text, speed = 45 }) {
+function TypewriterText({ text, speed = 45, scrollRef }) {
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -316,6 +316,13 @@ function TypewriterText({ text, speed = 45 }) {
 
     interval = setInterval(() => {
       setDisplayedText(text.slice(0, index + 1));
+
+      setTimeout(() => {
+        if (scrollRef?.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, 20);
+
       index++;
 
       if (index >= text.length) {
@@ -330,7 +337,7 @@ function TypewriterText({ text, speed = 45 }) {
       audio.pause();
       audio.currentTime = 0;
     };
-  }, [text, speed]);
+  }, [text, speed, scrollRef]);
 
   return (
     <p className="text-zinc-200 leading-relaxed whitespace-pre-wrap text-lg">
@@ -375,6 +382,19 @@ function MessageModal({ openedMessage, onClose, audioRef }) {
       setCurrentSectionIndex(currentSectionIndex - 1);
     }
   }
+
+  function autoScrollText(element) {
+  if (!element) return;
+
+  const interval = setInterval(() => {
+    element.scrollTop = element.scrollHeight;
+  }, 100);
+
+  setTimeout(() => {
+    clearInterval(interval);
+  }, 12000);
+}
+const messageScrollRef = useRef(null);
 
   return (
     <motion.div
@@ -427,14 +447,23 @@ function MessageModal({ openedMessage, onClose, audioRef }) {
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 min-h-[260px]">
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 min-h-[260px] overflow-hidden">
               <h3 className="text-2xl font-serif mb-5">
                 {currentSection.title}
               </h3>
 
               {!currentSection.isMedia && (
-                <TypewriterText text={currentSection.content} />
-              )}
+  <div
+    ref={messageScrollRef}
+    className="max-h-[45vh] overflow-y-auto pr-3 overscroll-contain scroll-smooth"
+  >
+    <TypewriterText
+      text={currentSection.content}
+      scrollRef={messageScrollRef}
+    />
+  </div>
+)}
+
 
               {currentSection.isMedia && (
                 <div className="grid gap-6">
@@ -656,35 +685,213 @@ function playPageSound() {
   audio.play().catch(() => {});
 }
 
+
+
 function MemoryBookModal({ messages, onClose }) {
   const bookRef = useRef(null);
 
-  const pages = useMemo(() => {
+  const [openedChapters, setOpenedChapters] = useState({});
+  const [bookVersion, setBookVersion] = useState(0);
+  const [pendingPageIndex, setPendingPageIndex] = useState(null);
+
+  const interludeMessages = [
+    {
+      title: "Tu n’es pas seule ✨",
+      text: "Il arrive parfois que la vie nous fasse croire que nous sommes seuls, surtout lorsque les distances grandissent, que les habitudes changent ou que les chemins se séparent. Pourtant, l’amour laissé dans le cœur des autres ne disparaît jamais. Ce livre existe pour te le rappeler. Chaque page que tu vas découvrir contient un souvenir, un sourire, une pensée, un mot ou une émotion qu’une personne a voulu préserver pour toi. Aujourd’hui, laisse-toi porter par ces souvenirs. Et n’oublie jamais ceci : Tu as compté pour beaucoup de personnes. Tu comptes encore. Et tu compteras toujours. ❤️🦋",
+      emoji: "🤍",
+    },
+    {
+      title: "Ta lumière compte 🦋",
+      text: "Il y aura peut-être des jours où tu te demanderas si tes efforts valent la peine. Des jours où les rêves sembleront lointains, où la fatigue prendra plus de place que l’espoir. Pourtant, même dans ces moments-là, ta lumière continue de briller. Tu as déjà traversé des épreuves que beaucoup n’auraient pas eu le courage d’affronter. N’oublie jamais que ta valeur ne dépend ni de tes réussites, ni de tes erreurs, ni du regard des autres. Tu es précieuse simplement parce que tu es toi. ✨",
+      emoji: "✨",
+    },
+    {
+      title: "La solitude n’est pas la fin 🌙",
+      text: "Il arrive parfois que les journées paraissent plus longues lorsque l’on est loin de ceux qu’on aime. Les habitudes changent, les repères disparaissent et certains moments peuvent donner l’impression d’avancer seul. Pourtant, la distance ne mesure jamais la force des liens qui nous unissent. Chaque appel, chaque souvenir, chaque pensée et chaque personne présente dans ce livre sont la preuve que ton histoire continue de vivre dans le cœur de ceux qui t’aiment. Cette période n’est pas une fin. C’est simplement un chapitre entre ce que tu as quitté et tout ce qui t’attend encore. Continue d’avancer avec confiance. Les plus beaux horizons se révèlent souvent à ceux qui ont eu le courage de traverser l’inconnu. 🦋✨",
+      emoji: "🌍",
+    },
+    {
+      title: "Dieu a toujours un regard sur toi  🙏",
+      text: "Il est facile de croire que nous sommes seuls lorsque les réponses tardent à venir ou lorsque les épreuves semblent s’accumuler. Pourtant, même dans les moments où tu as l’impression que personne ne voit ce que tu traverses, Dieu continue de veiller sur toi. Il connaît les batailles que tu mènes en silence. Il voit les efforts que personne ne remarque. Il entend les prières que tu n’as confiées à personne. Rien de ce qui concerne ta vie n’échappe à Son regard. Si certaines routes semblent longues aujourd’hui, c’est peut-être parce que Dieu est encore en train de préparer quelque chose de plus beau que ce que tu imagines. N’oublie jamais que tu es précieuse à Ses yeux. Tu n’es pas oubliée. Tu n’es pas abandonnée. Et même lorsque tu ne vois pas Sa main, Son regard continue de reposer sur toi avec amour. 🦋❤️📖 Ésaïe 43:1-5 « Ne crains rien, car je te rachète, Je t’appelle par ton nom : tu es à moi. Si tu traverses les eaux, je serai avec toi ; et les fleuves, ils ne te submergeront point; Si tu marches dans le feu, tu ne te brûleras pas, Et la flamme ne t'embrasera pas. Car je suis l'Eternel, ton Dieu, Le Saint d'Israël, ton sauveur; Je donne l'Egypte pour ta rançon, L'Ethiopie et Saba a ta place. Parce que tu as du prix à mes yeux, Parce que tu es honoré et que je t'aime, Je donne des hommes à ta place, Et des peuples pour ta vie. Ne crains rien, car je suis avec toi.»✨",
+      emoji: "🕊️",
+    },
+    {
+      title: "Tu es entourée d’amour ❤️",
+      text: "Si un jour le doute vient frapper à ta porte, ouvre simplement ce livre. Regarde toutes ces personnes qui ont pris le temps de t’écrire. Toutes ces personnes qui ont gardé un souvenir de toi. Toutes ces personnes qui ont voulu laisser une trace de leur affection dans cet univers. Tu n’es peut-être pas toujours consciente de l’impact que tu as sur les autres. Mais ces pages en sont la preuve. Tu es aimée. Tu es importante. Et ta lumière compte plus que tu ne l’imagines. ❤️🦋",
+      emoji: "❤️",
+    },
+  ];
+
+  const getMessageKey = (message, index) => {
+    return message.id || `${message.name || "chapitre"}-${index}`;
+  };
+
+  const getChapterCover = (message) => {
+    if (message.coverImage) return message.coverImage;
+
+    const firstImage = message.mediaItems?.find(
+      (media) => media.type === "image"
+    );
+
+    return firstImage?.url || "/nounours-profile.jpg";
+  };
+
+  function openChapter(messageKey, pageIndex) {
+    setOpenedChapters((prev) => ({
+      ...prev,
+      [messageKey]: true,
+    }));
+
+    setPendingPageIndex(pageIndex);
+    setBookVersion((prev) => prev + 1);
+  }
+
+  function closeChapter(messageKey, pageIndex) {
+    setOpenedChapters((prev) => ({
+      ...prev,
+      [messageKey]: false,
+    }));
+
+    setPendingPageIndex(pageIndex);
+    setBookVersion((prev) => prev + 1);
+  }
+
+  useEffect(() => {
+    if (pendingPageIndex !== null) {
+      setTimeout(() => {
+        const pageFlip = bookRef.current?.pageFlip?.();
+
+        if (!pageFlip) return;
+
+        if (typeof pageFlip.turnToPage === "function") {
+          pageFlip.turnToPage(pendingPageIndex);
+        } else if (typeof pageFlip.flip === "function") {
+          pageFlip.flip(pendingPageIndex);
+        }
+      }, 150);
+    }
+  }, [bookVersion, pendingPageIndex]);
+
+  const chapterPages = useMemo(() => {
     const result = [];
 
-    messages.forEach((message) => {
-      result.push({ type: "intro", message });
+    result.push({
+      type: "book-cover",
+    });
 
-      if (message.wish) result.push({ title: "✨ Souhait", text: message.wish, message });
-      if (message.funnyMoment) result.push({ title: "😂 Moment drôle", text: message.funnyMoment, message });
-      if (message.heartMessage) result.push({ title: "❤️ Message du cœur", text: message.heartMessage, message });
-      if (message.advice) result.push({ title: "🧠 Conseil", text: message.advice, message });
-      if (message.bestMemory) result.push({ title: "📸 Meilleur souvenir", text: message.bestMemory, message });
-      if (message.nickname) result.push({ title: "🏷️ Surnom", text: message.nickname, message });
-      if (message.learnedFromYou) result.push({ title: "🌱 Ce que j’ai appris", text: message.learnedFromYou, message });
-      if (message.becauseOfYou) result.push({ title: "🙏 Grâce à toi", text: message.becauseOfYou, message });
-      if (message.message) result.push({ title: "💌 Message", text: message.message, message });
+    result.push({
+      type: "intro",
+      title: "Chaque page porte une présence",
+      text:
+        "À Nounours,Si tu lis ces mots aujourd’hui, c’est que tu es arrivée jusqu’à un nouveau chapitre de ton livre. Derrière chaque page se cache une personne qui a croisé ton chemin, partagé des moments avec toi et gardé dans son cœur des souvenirs que le temps n’a jamais effacés. Certaines personnes sont proches, d’autres un peu plus loin aujourd’hui, mais toutes ont laissé une trace dans ton histoire. Ce chapitre n’est pas seulement une collection de messages. C’est une preuve que ton passage dans la vie des autres compte, que tu as fait rire, sourire, réfléchir, aimer et grandir des personnes autour de toi. Prends ton temps. Tourne les pages doucement. Derrière chacune d’elles se trouve un petit morceau d’amour qui t’est destiné. 🦋✨",
+    });
 
-      if (message.mediaItems?.length > 0) {
-        message.mediaItems.forEach((media) => {
-          result.push({ type: "media", media, message });
+    messages.forEach((message, messageIndex) => {
+      const messageKey = getMessageKey(message, messageIndex);
+
+      const isOpened = openedChapters[messageKey];
+
+      const gateIndex = result.length;
+
+      result.push({
+        type: "chapter-gate",
+        message,
+        messageKey,
+      });
+
+      if (isOpened) {
+        if (message.wish) {
+          result.push({
+            title: "✨ Mon souhait pour Nounours",
+            text: message.wish,
+            message,
+          });
+        }
+
+        if (message.funnyMoment) {
+          result.push({
+            title: "😂 Notre moment drôle",
+            text: message.funnyMoment,
+            message,
+          });
+        }
+
+        if (message.heartMessage) {
+          result.push({
+            title: "❤️ Message du cœur",
+            text: message.heartMessage,
+            message,
+          });
+        }
+
+        if (message.advice) {
+          result.push({
+            title: "🧠 Le conseil que je te donne",
+            text: message.advice,
+            message,
+          });
+        }
+
+        if (message.bestMemory) {
+          result.push({
+            title: "📸 Notre meilleur souvenir",
+            text: message.bestMemory,
+            message,
+          });
+        }
+
+        if (message.nickname) {
+          result.push({
+            title: "🏷️ Le surnom que je t’ai donné",
+            text: message.nickname,
+            message,
+          });
+        }
+
+        if (message.learnedFromYou) {
+          result.push({
+            title: "🌱 Ce que j’ai appris grâce à toi",
+            text: message.learnedFromYou,
+            message,
+          });
+        }
+
+        if (message.becauseOfYou) {
+          result.push({
+            title: "🙏 Grâce à Elvira",
+            text: message.becauseOfYou,
+            message,
+          });
+        }
+
+        if (message.mediaItems?.length > 0) {
+          message.mediaItems.forEach((media) => {
+            result.push({
+              type: "media",
+              media,
+              message,
+            });
+          });
+        }
+
+        result.push({
+          type: "chapter-end",
+          message,
+          messageKey,
+          nextPageIndex: gateIndex + 1,
         });
       }
+
+      result.push({
+        type: "interlude",
+        ...interludeMessages[
+          messageIndex % interludeMessages.length
+        ],
+      });
     });
 
     return result;
-  }, [messages]);
-
+  }, [messages, openedChapters]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -707,7 +914,6 @@ function MemoryBookModal({ messages, onClose }) {
           </div>
 
           <button
-            type="button"
             onClick={onClose}
             className="text-zinc-400 hover:text-white text-3xl"
           >
@@ -717,6 +923,7 @@ function MemoryBookModal({ messages, onClose }) {
 
         <div className="flex justify-center">
           <HTMLFlipBook
+            key={`book-${bookVersion}`}
             width={360}
             height={520}
             size="stretch"
@@ -729,62 +936,117 @@ function MemoryBookModal({ messages, onClose }) {
             clickEventForward={false}
             ref={bookRef}
           >
-            <div className="bg-[#fff7ee] text-zinc-900 p-10 rounded-l-xl flex flex-col justify-center items-center text-center relative h-auto">
-              <div className="absolute inset-0 bg-gradient-to-b from-pink-100 to-white opacity-70" />
-
-              <div className="relative z-10">
-                <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-2xl mb-8 mx-auto">
-                  <img
-                    src="/nounours-profile.jpg"
-                    alt="Nounours"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <p className="uppercase tracking-[0.4em] text-pink-500 text-xs mb-4">
-                  Univers émotionnel
-                </p>
-
-                <h2 className="text-5xl font-serif mb-6 leading-tight">
-                  Livre des souvenirs
-                </h2>
-
-                <p className="text-zinc-600 leading-relaxed max-w-sm mx-auto">
-                  Tous les papillons, tous les souvenirs, tous les mots d’amour réunis dans un seul livre.
-                </p>
-
-                <div className="mt-10 text-5xl">🦋</div>
-              </div>
-            </div>
-
-            {pages.map((page, index) => (
+            {chapterPages.map((page, index) => (
               <div
                 key={`${page.type || page.title}-${index}`}
-                className="bg-[#fff7ee] text-zinc-900 p-8 h-auto"
+                className="bg-[#fff7ee] text-zinc-900 p-8 h-full"
               >
+                {page.type === "book-cover" && (
+  <div className="h-full relative overflow-hidden rounded-xl flex flex-col justify-center items-center text-center p-8 border-[3px] border-yellow-300 shadow-[inset_0_0_45px_rgba(255,215,120,0.35),0_0_35px_rgba(255,215,120,0.25)] bg-gradient-to-b from-pink-50 via-[#fff7ee] to-yellow-50">
+
+    <div className="absolute inset-4 rounded-xl border border-yellow-400/60 pointer-events-none" />
+    <div className="absolute inset-7 rounded-xl border border-pink-200/70 pointer-events-none" />
+
+    <div className="absolute top-8 left-8 text-3xl opacity-70">✨</div>
+    <div className="absolute top-10 right-10 text-3xl opacity-70">🦋</div>
+    <div className="absolute bottom-12 left-10 text-3xl opacity-70">🤍</div>
+    <div className="absolute bottom-10 right-10 text-3xl opacity-70">✨</div>
+
+    <motion.div
+      animate={{ y: [0, -8, 0], rotate: [0, 4, -4, 0] }}
+      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      className="relative z-10 w-40 h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-[0_0_35px_rgba(255,105,180,0.45)] mb-8 mx-auto"
+    >
+      <img
+        src="/nounours-profile.jpg"
+        alt="Nounours"
+        className="w-full h-full object-cover"
+      />
+    </motion.div>
+
+    <div className="relative z-10">
+      <p className="uppercase tracking-[0.55em] text-pink-500 text-xs mb-5 font-bold">
+        Univers émotionnel
+      </p>
+
+      <h2 className="text-5xl font-serif mb-6 leading-tight text-zinc-900 drop-shadow-[0_0_15px_rgba(255,215,120,0.45)]">
+        Livre des souvenirs
+      </h2>
+
+      <p className="text-zinc-600 leading-relaxed max-w-sm mx-auto">
+        Tous les papillons, tous les souvenirs, tous les mots d’amour réunis dans un seul livre.
+      </p>
+
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], y: [0, -6, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="mt-10 text-5xl drop-shadow-[0_0_18px_rgba(255,180,80,0.65)]"
+      >
+        🦋
+      </motion.div>
+    </div>
+  </div>
+)}
+
                 {page.type === "intro" && (
                   <div className="h-full flex flex-col justify-center text-center">
-                    <div className="text-6xl mb-6">
-                      {getButterflyStyle(page.message.relation).emoji}
-                    </div>
-
-                    <p className="uppercase tracking-[0.3em] text-pink-500 text-xs mb-4">
-                      {page.message.relation}
-                    </p>
+                    <div className="text-6xl mb-6">📖</div>
 
                     <h2 className="text-4xl font-serif mb-6">
-                      {page.message.name}
+                      {page.title}
                     </h2>
 
-                    <p className="text-zinc-600">
-                      Un papillon rempli de souvenirs.
+                    <p className="text-zinc-600 leading-relaxed text-lg">
+                      {page.text}
                     </p>
+                  </div>
+                )}
+
+                {page.type === "chapter-gate" && (
+                  <div className="h-full relative rounded-xl overflow-hidden flex items-center justify-center text-center">
+                    <img
+                      src={getChapterCover(page.message)}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+
+                    <div className="absolute inset-0 bg-black/60" />
+
+                    <div className="relative z-10 text-white p-6">
+                      <p className="uppercase tracking-[0.3em] text-pink-200 text-xs mb-4">
+                        Nouveau chapitre
+                      </p>
+
+                      <h2 className="text-5xl font-serif mb-6">
+                        Mon chapitre avec {page.message.name}
+                      </h2>
+
+                      <p className="mb-8 text-white/80">
+                        {page.message.relation}
+                      </p>
+
+                      <button
+                        onClick={() =>
+                          openChapter(
+                            page.messageKey,
+                            index + 1
+                          )
+                        }
+                        className="bg-white text-black px-8 py-3 rounded-full hover:scale-105 transition"
+                      >
+                        Ouvrir le chapitre ✨
+                      </button>
+
+                      <p className="mt-6 text-white/70 text-sm">
+                        Ou tourne simplement la page pour le passer.
+                      </p>
+                    </div>
                   </div>
                 )}
 
                 {!page.type && (
                   <div className="h-full flex flex-col">
-                    <p className="text-sm text-pink-500 mb-4">
+                    <p className="text-pink-500 text-sm mb-3">
                       {page.message.name}
                     </p>
 
@@ -792,24 +1054,16 @@ function MemoryBookModal({ messages, onClose }) {
                       {page.title}
                     </h3>
 
-                    <div className="overflow-y-auto max-h-[420px] pr-3">
-                      <p className="text-zinc-700 leading-relaxed whitespace-pre-line text-lg">
+                    <div className="overflow-y-auto flex-1 pr-3">
+                      <p className="text-zinc-700 whitespace-pre-line leading-relaxed text-lg">
                         {page.text}
                       </p>
-                    </div>
-
-                    <div className="mt-auto text-right text-zinc-400 text-sm">
-                      Page {index + 1}
                     </div>
                   </div>
                 )}
 
                 {page.type === "media" && (
-                  <div className="h-full flex flex-col overflow-hidden">
-                    <p className="text-sm text-pink-500 mb-4">
-                      {page.message.name}
-                    </p>
-
+                  <div className="h-full flex flex-col">
                     <h3 className="text-3xl font-serif mb-6">
                       📸 Souvenir
                     </h3>
@@ -817,8 +1071,8 @@ function MemoryBookModal({ messages, onClose }) {
                     {page.media.type === "image" && (
                       <img
                         src={page.media.url}
-                        alt="Souvenir"
-                        className="rounded-2xl w-full max-h-[360px] object-cover mb-4"
+                        alt=""
+                        className="rounded-2xl w-full max-h-[350px] object-cover mb-4"
                       />
                     )}
 
@@ -826,7 +1080,7 @@ function MemoryBookModal({ messages, onClose }) {
                       <video
                         src={page.media.url}
                         controls
-                        className="rounded-2xl w-full max-h-[360px] mb-4"
+                        className="rounded-2xl w-full max-h-[350px] mb-4"
                       />
                     )}
 
@@ -839,54 +1093,83 @@ function MemoryBookModal({ messages, onClose }) {
                     )}
 
                     {page.media.caption && (
-                      <p className="text-zinc-700 whitespace-pre-wrap">
-                        {page.media.caption}
-                      </p>
+                      <p>{page.media.caption}</p>
                     )}
+                  </div>
+                )}
+
+                {page.type === "chapter-end" && (
+                  <div className="h-full flex flex-col justify-center items-center text-center">
+                    <div className="text-6xl mb-6">🦋</div>
+
+                    <h2 className="text-4xl font-serif mb-5">
+                      Fin du chapitre
+                    </h2>
+
+                    <p className="text-zinc-600 mb-8">
+                      Le chapitre avec {page.message.name}
+                      restera gravé dans ce livre.
+                    </p>
+
+                    <button
+                      onClick={() =>
+                        closeChapter(
+                          page.messageKey,
+                          page.nextPageIndex
+                        )
+                      }
+                      className="bg-pink-500 text-white px-6 py-3 rounded-full hover:scale-105 transition"
+                    >
+                      Fermer le chapitre →
+                    </button>
+                  </div>
+                )}
+
+                {page.type === "interlude" && (
+                  <div className="h-full flex flex-col justify-center items-center text-center">
+                    <div className="text-6xl mb-6">
+                      {page.emoji}
+                    </div>
+
+                    <h2 className="text-4xl font-serif mb-6">
+                      {page.title}
+                    </h2>
+
+                    <p className="text-zinc-600 leading-relaxed text-lg">
+                      {page.text}
+                    </p>
                   </div>
                 )}
               </div>
             ))}
-
-            <div className="bg-[#fff7ee] text-zinc-900 p-10 rounded-r-xl flex flex-col justify-center items-center text-center">
-              <div className="text-6xl mb-6">❤️</div>
-
-              <h2 className="text-4xl font-serif mb-5">
-                Fin du livre
-              </h2>
-
-              <p className="text-zinc-600 leading-relaxed">
-                Ce livre restera comme une trace de tous ceux qui t’aiment.
-              </p>
-            </div>
           </HTMLFlipBook>
         </div>
 
         <div className="flex justify-center gap-4 mt-6">
-  <button
-    type="button"
-    onClick={() => bookRef.current?.pageFlip().flipPrev()}
-    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-[0_0_25px_rgba(255,105,180,0.5)] hover:scale-105 transition"
-  >
-    ← Page précédente
-  </button>
+          <button
+            onClick={() =>
+              bookRef.current?.pageFlip().flipPrev()
+            }
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full"
+          >
+            ← Page précédente
+          </button>
 
-  <button
-    type="button"
-    onClick={() => bookRef.current?.pageFlip().flipNext()}
-    className="bg-gradient-to-r from-yellow-300 to-pink-500 text-black px-6 py-3 rounded-full shadow-[0_0_25px_rgba(255,215,120,0.5)] hover:scale-105 transition font-medium"
-  >
-    Page suivante →
-  </button>
-</div>
-
-        <p className="text-center text-zinc-400 mt-8">
-          Utilise les boutons pour tourner les pages du livre ✨
-        </p>
+          <button
+            onClick={() =>
+              bookRef.current?.pageFlip().flipNext()
+            }
+            className="bg-gradient-to-r from-yellow-300 to-pink-500 text-black px-6 py-3 rounded-full"
+          >
+            Page suivante →
+          </button>
+        </div>
       </div>
     </motion.div>
   );
 }
+
+
 
 function MemoryGlobe({ messages, onOpenMessage }) {
   if (!messages || messages.length === 0) {
@@ -1033,7 +1316,7 @@ function MemoryGlobe({ messages, onOpenMessage }) {
   );
 }
 
-function EternalMemoryGate({ onClose }) {
+function EternalMemoryGate({ onClose, audioRef }) {
   const [gateOpened, setGateOpened] = useState(false);
   const [showEllaIntro, setShowEllaIntro] = useState(false);
   const [currentMemory, setCurrentMemory] = useState(0);
@@ -1107,6 +1390,16 @@ function EternalMemoryGate({ onClose }) {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] bg-black overflow-hidden overscroll-contain"
     >
+
+      <button
+  type="button"
+  onClick={onClose}
+  className="fixed top-5 right-5 z-[99999] w-12 h-12 rounded-full bg-black/60 border border-white/30 text-white text-2xl hover:bg-white hover:text-black transition"
+  aria-label="Quitter la Lumière Éternelle"
+>
+  ✕
+</button>
+
       <div className="absolute inset-0">
         <img
           src={gateOpened ? "/ella-heaven.jpg" : "/ella-gate.jpg"}
@@ -1630,7 +1923,7 @@ export default function MonUniversPage() {
     <>
   <audio
     ref={audioRef}
-    src="/piano.mp3"
+    src="/piano2.mp3"
     autoPlay
     loop
   />
@@ -1649,10 +1942,7 @@ export default function MonUniversPage() {
       <MagicalStars />
       <MagicCursorTrail />
 
-      <audio autoPlay loop>
-        <source src="/piano2.mp3" type="audio/mpeg" />
-      </audio>
-
+      
       <section className="relative z-10 px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1703,20 +1993,7 @@ export default function MonUniversPage() {
   transition={{ delay: 0.3 }}
   className="max-w-3xl mx-auto mb-16"
 >
-  <button
-    onClick={() => setShowEllaGate(true)}
-    className="w-full bg-white/10 border border-yellow-200/40 hover:border-yellow-200 rounded-3xl p-10 text-center backdrop-blur-md hover:scale-[1.02] transition shadow-[0_0_50px_rgba(255,215,120,0.15)]"
-  >
-    <div className="text-6xl mb-5">🕊️</div>
-
-    <h2 className="text-3xl font-serif mb-3 text-yellow-100">
-      Éternelle lumière 🤍🕊️
-    </h2>
-
-    <p className="text-yellow-50/80">
-      Une présence éternel qui continue de briller ✨🌟.
-    </p>
-  </button>
+ 
 </motion.div>
 
         </motion.div>
@@ -1838,6 +2115,22 @@ export default function MonUniversPage() {
             Une dernière surprise de Nounours.
           </p>
         </motion.button>
+        
+          <button
+    onClick={() => setShowEllaGate(true)}
+    className="mt-15 w-full bg-white/10 border border-yellow-200/40 hover:border-yellow-200 rounded-3xl p-10 text-center backdrop-blur-md hover:scale-[1.02] transition shadow-[0_0_50px_rgba(255,215,120,0.15)]"
+  >
+    <div className="text-6xl mb-5">🕊️</div>
+
+    <h2 className="text-3xl font-serif mb-3 text-yellow-100">
+      Éternelle lumière 🤍🕊️
+    </h2>
+
+    <p className="text-yellow-50/80">
+      Une présence éternel qui continue de briller ✨🌟.
+    </p>
+  </button>
+
       </div>
 
       <AnimatePresence>
@@ -1867,10 +2160,11 @@ export default function MonUniversPage() {
 
       <AnimatePresence>
   {showEllaGate && (
-    <EternalMemoryGate
-      onClose={() => setShowEllaGate(false)}
-    />
-  )}
+  <EternalMemoryGate
+    onClose={() => setShowEllaGate(false)}
+    audioRef={audioRef}
+  />
+)}
 </AnimatePresence>
 
     </main>

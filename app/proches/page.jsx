@@ -28,6 +28,7 @@ export default function ProchesPage() {
   const [becauseOfYou, setBecauseOfYou] = useState("");
 
   const [mediaItems, setMediaItems] = useState([{ file: null, caption: "" }]);
+  const [coverImageFile, setCoverImageFile] = useState(null);
 
   const [voiceFile, setVoiceFile] = useState(null);
   const [voiceUrl, setVoiceUrl] = useState("");
@@ -42,27 +43,22 @@ export default function ProchesPage() {
   const procheIntroSteps = [
     {
       title: "Bienvenue dans l’univers d’Elvira",
-      text: "Tu vas créer un papillon souvenir pour Elvira. Afin d'embellir sa journée d'Anniversaire.🥳 Un papillon, c’est comme une petite étoile vivante : il contient tes mots, tes souvenirs avec Elvy, tes photos, tes vidéos ou même un vocal avec elle.😻",
+      text: " À l’occasion de son anniversaire, nous t’invitons à lui laisser un morceau de ton cœur.Un souvenir qui te fait sourire.Une photo oubliée. Une vidéo qui compte pour toi.Quelques mots qu’elle mérite d’entendre.Chaque papillon deviendra une petite lumière dans son univers et lui rappellera à quel point elle est aimée. 🦋❤️ 🦋",
       emoji: "🦋",
     },
     {
-      title: "Comment Elvira va le recevoir ?",
-      text: "Quand Elvira entrera dans son jardin secret, elle verra les papillons laissés par ses proches. En cliquant sur ton papillon, elle découvrira ce que tu as écrit et les souvenirs que tu as partagés.",
-      emoji: "✨",
-    },
-    {
-      title: "Ce n’est pas un simple formulaire",
-      text: "Ce que tu écris peut la faire sourire, rire, pleurer ou revivre un moment précieux. Écris comme si tu lui laissais une petite capsule de son cœur.🥰",
+      title: "Laisse une trace de ton cœur",
+      text: "Pour son son anniversaire, offre-lui quelque chose qui ne s’achète pas : un souvenir, une émotion,un mot sincère, ou un message qu’elle pourra conserver pour toujours. Les plus beaux cadeaux sont souvent ceux qui viennent du cœur. 🎂❤️ 💌",
       emoji: "💌",
     },
     {
-      title: "Partage tes photos, vidéos ou vocaux",
-      text: "Ajoute les photos, vidéos ou vocaux que tu aimes avec Elvira. Chaque média formera une galerie de souvenirs pour elle.",
+      title: "Ajoute tes souvenirs",
+      text: "Tu peux joindre des photos, vidéos avec chant, danse ou un vocal. Ce n’est pas obligatoire, mais cela rendra ton papillon encore plus spécial. 📸",
       emoji: "📸",
     },
     {
-      title: "Rends ton papillon unique",
-      text: "Tu peux remplir seulement les parties qui t’inspirent. L’important, c’est que ce soit sincère, personnel et rempli de toi.",
+      title: "Dépose ton papillon",
+      text: "Remplis seulement les parties qui t’inspirent. L’important est que ce soit personnel, sincère et rempli d’amour. ❤️",
       emoji: "❤️",
     },
   ];
@@ -167,7 +163,13 @@ export default function ProchesPage() {
     setSuccess(false);
 
     try {
+      let uploadedCoverImageUrl = "";
       const uploadedMediaItems = [];
+
+      if (coverImageFile) {
+        const uploadedCoverImage = await uploadToCloudinary(coverImageFile);
+        uploadedCoverImageUrl = uploadedCoverImage.secure_url;
+      }
 
       for (const item of mediaItems) {
         if (item.file) {
@@ -204,6 +206,7 @@ export default function ProchesPage() {
         nickname,
         learnedFromYou,
         becauseOfYou,
+        coverImage: uploadedCoverImageUrl,
         mediaItems: uploadedMediaItems,
         createdAt: serverTimestamp(),
       });
@@ -219,6 +222,7 @@ export default function ProchesPage() {
       setLearnedFromYou("");
       setBecauseOfYou("");
       setMediaItems([{ file: null, caption: "" }]);
+      setCoverImageFile(null);
       setVoiceFile(null);
       setVoiceUrl("");
       setSuccess(true);
@@ -230,7 +234,7 @@ export default function ProchesPage() {
     setLoading(false);
   }
 
-  if (!hasStarted) {
+    if (!hasStarted) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#160020] via-black to-black" />
@@ -284,6 +288,31 @@ export default function ProchesPage() {
   return (
     <main className="min-h-screen bg-black text-white relative overflow-hidden px-6 py-12">
       <div className="absolute inset-0 bg-gradient-to-b from-[#160020] via-black to-black" />
+      {[...Array(12)].map((_, i) => (
+  <motion.div
+    key={i}
+    className="absolute text-3xl pointer-events-none"
+    initial={{
+      x: Math.random() * 1200,
+      y: 900,
+      opacity: 0,
+    }}
+    animate={{
+      y: -200,
+      x: Math.random() * 1200,
+      opacity: [0, 1, 1, 0],
+      rotate: [0, 15, -15, 0],
+    }}
+    transition={{
+      duration: 15 + Math.random() * 10,
+      repeat: Infinity,
+      ease: "linear",
+      delay: Math.random() * 8,
+    }}
+  >
+    🦋
+  </motion.div>
+))}
 
       <section className="relative z-10 max-w-3xl mx-auto">
         <div className="text-center mb-10">
@@ -291,13 +320,21 @@ export default function ProchesPage() {
             L’Univers d’Elvira
           </p>
 
-          <h1 className="text-5xl md:text-6xl font-serif mb-6">
-            Créer ton papillon 🦋
-          </h1>
-
+          <motion.h1
+  animate={{
+    scale: [1, 1.02, 1],
+  }}
+  transition={{
+    duration: 4,
+    repeat: Infinity,
+  }}
+  className="text-5xl md:text-6xl font-serif mb-6"
+>
+  Laisse ton papillon 🦋
+</motion.h1>
           <p className="text-zinc-300 leading-relaxed">
-            Ton papillon sera une capsule de souvenirs qu’Elvira découvrira dans son jardin secret.
-            Remplis ce qui t’inspire, ajoute tes photos, vidéos ou vocaux préférés avec elle, puis dépose ton papillon.
+            Partage un souvenir, un message, une photo, une vidéo ou un vocal.
+            Chaque détail pourra devenir un moment précieux qu’Elvira redécouvrira plus tard. ✨
           </p>
         </div>
 
@@ -306,14 +343,19 @@ export default function ProchesPage() {
             Comment rendre ton papillon magique ?
           </h2>
 
-          <p className="text-zinc-300 leading-relaxed">
-            Pense à un moment précis avec Elvira. Une phrase qu’elle t’a dite.
-            Une bêtise, une sortie, un fou rire, une photo, une vidéo ou un vocal simple mais précieux.
-            Plus ton message est personnel, plus son papillon sera spécial.
+          <p className="text-zinc-300 leading-relaxed whitespace-pre-line">
+            {`Pense à un moment que vous avez partagé ensemble.
+
+Un fou rire.
+Une phrase qu’elle t’a dite.
+Une photo oubliée.
+Un souvenir qui te fait sourire.
+
+Ce sont souvent les petites choses qui deviennent les plus beaux souvenirs. 🦋`}
           </p>
         </div>
 
-        <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-xl">
+        <div className="bg-white/10 border border-white/10 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-[0_0_60px_rgba(236,72,153,0.15)]">
           {isSubmissionClosed ? (
             <div className="bg-black/30 border border-white/10 rounded-3xl p-10 text-center">
               <h2 className="text-4xl font-serif mb-6">
@@ -329,9 +371,27 @@ export default function ProchesPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+
+<motion.div
+  animate={{
+    y: [0, -10, 0],
+    rotate: [0, 5, -5, 0],
+  }}
+  transition={{
+    duration: 4,
+    repeat: Infinity,
+  }}
+  className="text-center text-7xl mb-8 drop-shadow-[0_0_25px_rgba(255,215,120,0.8)]"
+>
+  ✨🦋✨
+</motion.div>
               {success && (
-                <div className="mb-6 rounded-2xl bg-green-500/10 border border-green-400/20 text-green-300 p-4 text-center">
-                  Ton papillon a bien été déposé dans son jardin secret ❤️
+                <div className="mb-6 rounded-2xl bg-green-500/10 border border-green-400/20 text-green-300 p-4 text-center whitespace-pre-line">
+                  {`🦋 🦋✨🦋✨🦋
+
+Ton papillon a pris son envol.
+
+Il vole maintenant vers le jardin secret d’Elvira. ❤️`}
                 </div>
               )}
 
@@ -358,9 +418,14 @@ export default function ProchesPage() {
                 <option value="Cousine">Cousine</option>
                 <option value="Tante">Tante</option>
                 <option value="Oncle">Oncle</option>
+                 <option value="Neveux">Neveux</option>
+                  <option value="Nièce">Nièce</option>
+
                 <option value="Meilleure ami(e)">Meilleure ami(e)</option>
                 <option value="Ami(e)">Ami(e)</option>
                 <option value="Collègue">Collègue</option>
+                <option value="Connaissance">Connaissance</option>
+                <option value="Camarade">Camarade</option>
                 <option value="Autre">Autre</option>
               </select>
 
@@ -375,10 +440,54 @@ export default function ProchesPage() {
               <textarea className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-pink-400 min-h-28" placeholder="🌱 Ce que tu as appris grâce à Elvira" value={learnedFromYou} onChange={(e) => setLearnedFromYou(e.target.value)} />
               <textarea className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-pink-400 min-h-28" placeholder="🙏 Grâce à Elvira, je suis... / j’ai..." value={becauseOfYou} onChange={(e) => setBecauseOfYou(e.target.value)} />
 
-              <div className="bg-white/5 border border-white/10 rounded-3xl p-5 space-y-5">
-                <p className="text-pink-300 font-medium text-lg">
-                  📸🎥 Galerie de souvenirs optionnelle
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-5 space-y-4">
+                <div>
+  <p className="text-pink-300 font-medium text-lg">
+    🖼️ Photo de couverture du chapitre
+  </p>
+
+  <motion.div
+    animate={{
+      rotate: [0, 2, -2, 0],
+    }}
+    transition={{
+      duration: 5,
+      repeat: Infinity,
+    }}
+    className="text-5xl text-center mt-4"
+  >
+    📖✨🦋✨📖
+  </motion.div>
+</div>
+
+                <p className="text-zinc-400 text-sm">
+                  Choisis une photo qui représentera ton chapitre dans le livre des souvenirs.
                 </p>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setCoverImageFile(e.target.files[0])}
+                  className="w-full text-sm text-zinc-300 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-5 file:py-3 file:text-black"
+                />
+
+                {coverImageFile && (
+                  <p className="text-sm text-zinc-400">
+                    Photo sélectionnée : {coverImageFile.name}
+                  </p>
+                )}
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-3xl p-5 space-y-5">
+                <div>
+                  <p className="text-pink-300 font-medium text-lg">
+                    📸 Galerie de souvenirs
+                  </p>
+
+                  <p className="text-zinc-400 text-sm mt-1">
+                    Photos et vidéos que tu aimerais lui faire redécouvrir.
+                  </p>
+                </div>
 
                 {mediaItems.map((item, index) => (
                   <div key={index} className="bg-black/30 border border-white/10 rounded-2xl p-4 space-y-4">
@@ -432,9 +541,15 @@ export default function ProchesPage() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-3xl p-5 space-y-5">
-                <p className="text-pink-300 font-medium text-lg">
-                  🎙️ Ajouter un vocal optionnel
-                </p>
+                <div>
+                  <p className="text-pink-300 font-medium text-lg">
+                    🎙️ Laisse un message vocal
+                  </p>
+
+                  <p className="text-zinc-400 text-sm mt-1">
+                    Quelques secondes suffisent parfois pour créer un souvenir inoubliable.
+                  </p>
+                </div>
 
                 {!isRecording ? (
                   <button
@@ -473,14 +588,14 @@ export default function ProchesPage() {
                 disabled={loading}
                 className="w-full bg-white text-black rounded-full py-4 text-lg font-medium hover:scale-[1.02] transition disabled:opacity-50"
               >
-                {loading ? "Dépôt du papillon..." : "Déposer mon butterfly"}
+                {loading ? "Dépôt du papillon..." : "Faire s'envoler mon papillon 🦋"}
               </button>
 
               <div className="mb-8 text-center bg-pink-500/10 border border-pink-300/20 rounded-3xl p-6">
                 <p className="text-zinc-200 leading-relaxed text-lg">
-                  Les souvenirs ne s’arrêtent jamais ✨
+                  Chaque souvenir partagé aujourd’hui
                   <br />
-                  Reviens déposer un nouveau papillon quand ton cœur en ressent le besoin.
+                  deviendra une lumière dans l’univers d’Elvira. ✨
                 </p>
 
                 <p className="text-pink-300 mt-4 font-medium">
