@@ -897,18 +897,18 @@ function MemoryBookModal({ messages, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[70] bg-black/95 overflow-y-auto px-4 py-10"
+      className="fixed inset-0 z-[70] bg-black/95 overflow-hidden px-3 py-3"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#250033] via-black to-black" />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-10">
+      <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col">
+        <div className="flex items-start justify-between mb-4 px-2">
           <div>
             <p className="uppercase tracking-[0.4em] text-pink-400 text-sm mb-3">
               Un jardin rempli d’amour uniquement pour Nounours
             </p>
 
-            <h1 className="text-4xl md:text-6xl font-serif text-white">
+            <h1 className="text-3xl md:text-6xl font-serif text-white leading-tight">
               Livre des souvenirs 📖
             </h1>
           </div>
@@ -921,16 +921,16 @@ function MemoryBookModal({ messages, onClose }) {
           </button>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center overflow-hidden">
           <HTMLFlipBook
             key={`book-${bookVersion}`}
             width={360}
-            height={520}
+            height={460}
             size="stretch"
-            minWidth={300}
-            maxWidth={700}
-            minHeight={420}
-            maxHeight={900}
+            minWidth={260}
+            maxWidth={620}
+            minHeight={360}
+            maxHeight={620}
             showCover={true}
             useMouseEvents={false}
             clickEventForward={false}
@@ -939,13 +939,13 @@ function MemoryBookModal({ messages, onClose }) {
             {chapterPages.map((page, index) => (
               <div
                 key={`${page.type || page.title}-${index}`}
-                className="bg-[#fff7ee] text-zinc-900 p-8 h-full"
+                className="bg-gradient-to-br from-[#fffaf2] via-[#fff4e6] to-[#f8e8c9] text-zinc-900 p-8 h-full border-[8px] border-yellow-200 shadow-[0_0_40px_rgba(255,215,100,0.35)]"
               >
                 {page.type === "book-cover" && (
   <div className="h-full relative overflow-hidden rounded-xl flex flex-col justify-center items-center text-center p-8 border-[3px] border-yellow-300 shadow-[inset_0_0_45px_rgba(255,215,120,0.35),0_0_35px_rgba(255,215,120,0.25)] bg-gradient-to-b from-pink-50 via-[#fff7ee] to-yellow-50">
 
-    <div className="absolute inset-4 rounded-xl border border-yellow-400/60 pointer-events-none" />
-    <div className="absolute inset-7 rounded-xl border border-pink-200/70 pointer-events-none" />
+    <div className="absolute inset-4 rounded-xl border border-yellow-500 pointer-events-none" />
+    <div className="absolute inset-7 rounded-xl border border-pink-200 pointer-events-none" />
 
     <div className="absolute top-8 left-8 text-3xl opacity-70">✨</div>
     <div className="absolute top-10 right-10 text-3xl opacity-70">🦋</div>
@@ -953,23 +953,27 @@ function MemoryBookModal({ messages, onClose }) {
     <div className="absolute bottom-10 right-10 text-3xl opacity-70">✨</div>
 
     <motion.div
-      animate={{ y: [0, -8, 0], rotate: [0, 4, -4, 0] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="relative z-10 w-40 h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-[0_0_35px_rgba(255,105,180,0.45)] mb-8 mx-auto"
-    >
-      <img
-        src="/nounours-profile.jpg"
-        alt="Nounours"
-        className="w-full h-full object-cover"
-      />
-    </motion.div>
+  animate={{ y: [0, -8, 0], rotate: [0, 4, -4, 0] }}
+  transition={{
+    duration: 4,
+    repeat: Infinity,
+    ease: "easeInOut",
+  }}
+  className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-[0_0_35px_rgba(255,105,180,0.45)] mb-5 md:mb-8 mx-auto shrink-0"
+>
+  <img
+    src="/nounours-profile.jpg"
+    alt="Nounours"
+    className="w-full h-full object-cover"
+  />
+</motion.div>
 
     <div className="relative z-10">
       <p className="uppercase tracking-[0.55em] text-pink-500 text-xs mb-5 font-bold">
         Univers émotionnel
       </p>
 
-      <h2 className="text-5xl font-serif mb-6 leading-tight text-zinc-900 drop-shadow-[0_0_15px_rgba(255,215,120,0.45)]">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif mb-4 md:mb-6 leading-tight text-zinc-900 drop-shadow-[0_0_15px_rgba(255,215,120,0.45)]">
         Livre des souvenirs
       </h2>
 
@@ -989,18 +993,24 @@ function MemoryBookModal({ messages, onClose }) {
 )}
 
                 {page.type === "intro" && (
-                  <div className="h-full flex flex-col justify-center text-center">
-                    <div className="text-6xl mb-6">📖</div>
+  <div className="h-full flex flex-col text-center px-3 overflow-hidden">
+    <div className="text-5xl md:text-6xl mb-4 shrink-0">📖</div>
 
-                    <h2 className="text-4xl font-serif mb-6">
-                      {page.title}
-                    </h2>
+    <p className="uppercase tracking-[0.35em] text-pink-400 text-xs mb-3 shrink-0">
+      Avant de commencer
+    </p>
 
-                    <p className="text-zinc-600 leading-relaxed text-lg">
-                      {page.text}
-                    </p>
-                  </div>
-                )}
+    <h2 className="text-3xl md:text-4xl font-serif mb-4 text-zinc-900 shrink-0">
+      {page.title}
+    </h2>
+
+    <div className="overflow-y-auto flex-1 pr-2">
+      <p className="text-zinc-600 leading-relaxed text-base md:text-lg whitespace-pre-line">
+        {page.text}
+      </p>
+    </div>
+  </div>
+)}
 
                 {page.type === "chapter-gate" && (
                   <div className="h-full relative rounded-xl overflow-hidden flex items-center justify-center text-center">
@@ -1054,11 +1064,11 @@ function MemoryBookModal({ messages, onClose }) {
                       {page.title}
                     </h3>
 
-                    <div className="overflow-y-auto flex-1 pr-3">
-                      <p className="text-zinc-700 whitespace-pre-line leading-relaxed text-lg">
-                        {page.text}
-                      </p>
-                    </div>
+                    <div className="flex-1 overflow-y-auto pr-3 max-h-[260px] md:max-h-[360px]">
+  <p className="text-zinc-700 whitespace-pre-line leading-relaxed text-base md:text-lg">
+    {page.text}
+  </p>
+</div>
                   </div>
                 )}
 
@@ -1125,19 +1135,25 @@ function MemoryBookModal({ messages, onClose }) {
                   </div>
                 )}
 
-                {page.type === "interlude" && (
-                  <div className="h-full flex flex-col justify-center items-center text-center">
-                    <div className="text-6xl mb-6">
+                                {page.type === "interlude" && (
+                  <div className="h-full flex flex-col text-center px-3 overflow-hidden">
+                    <motion.div
+                      animate={{ scale: [1, 1.08, 1] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="text-5xl md:text-6xl mb-4 shrink-0"
+                    >
                       {page.emoji}
-                    </div>
+                    </motion.div>
 
-                    <h2 className="text-4xl font-serif mb-6">
+                    <h2 className="text-3xl md:text-4xl font-serif mb-4 text-zinc-900 shrink-0">
                       {page.title}
                     </h2>
 
-                    <p className="text-zinc-600 leading-relaxed text-lg">
-                      {page.text}
-                    </p>
+                    <div className="overflow-y-auto flex-1 pr-2">
+                      <p className="text-zinc-600 leading-relaxed text-base md:text-lg whitespace-pre-line">
+                        {page.text}
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1145,7 +1161,7 @@ function MemoryBookModal({ messages, onClose }) {
           </HTMLFlipBook>
         </div>
 
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex justify-center gap-4 mt-2 shrink-0">
           <button
             onClick={() =>
               bookRef.current?.pageFlip().flipPrev()
