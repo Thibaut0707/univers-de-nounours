@@ -566,9 +566,12 @@ function FinalMessageModal({ onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-[60] flex items-center justify-center px-6 overflow-hidden"
+      className="fixed inset-0 z-[60] flex items-center justify-center px-6 overflow-hidden bg-gradient-to-br from-[#35004d] via-[#14001f] to-[#050505]"
     >
      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,182,193,0.15),transparent_35%)]" />
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(255,215,0,0.10),transparent_30%)]" />
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,105,180,0.10),transparent_30%)]" />
   <video
     autoPlay
     muted
@@ -579,7 +582,7 @@ function FinalMessageModal({ onClose }) {
     <source src="/final-background.mp4" type="video/mp4" />
   </video>
 
-  <div className="absolute inset-0 bg-black/45" />
+  <div className="absolute inset-0 bg-black/15" />
 </div>
       {[...Array(80)].map((_, index) => (
   <motion.div
@@ -641,7 +644,7 @@ function FinalMessageModal({ onClose }) {
         initial={{ opacity: 0, scale: 0.85, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="relative z-10 max-w-3xl text-center bg-white/10 border border-pink-300/20 backdrop-blur-md rounded-[2rem] p-8 md:p-12 shadow-[0_0_80px_rgba(255,105,180,0.25)]"
+        className="relative z-10 max-w-5xl w-full text-center bg-black/25 border border-white/15 backdrop-blur-[4px] rounded-[2rem] p-8 md:p-12 shadow-[0_0_35px_rgba(255,255,255,0.08)]"
       >
         <p className="uppercase tracking-[0.5em] text-pink-400 text-sm mb-8">
           Surprise finale
@@ -899,16 +902,42 @@ function MemoryBookModal({ messages, onClose }) {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[70] bg-black/95 overflow-hidden px-3 py-3"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#250033] via-black to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#3b0057] via-[#1b0028] to-black" />
 
-      <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col">
-        <div className="flex items-start justify-between mb-4 px-2">
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,182,193,0.18),transparent_40%)]" />
+
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(255,215,0,0.12),transparent_35%)]" />
+
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,105,180,0.12),transparent_35%)]" />
+{[...Array(25)].map((_, i) => (
+  <motion.div
+    key={i}
+    className="absolute text-yellow-200 pointer-events-none"
+    style={{
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+    }}
+    animate={{
+      opacity: [0.2, 1, 0.2],
+      scale: [1, 1.5, 1],
+    }}
+    transition={{
+      duration: 2 + Math.random() * 4,
+      repeat: Infinity,
+    }}
+  >
+    ✨
+  </motion.div>
+))}
+
+      <div className="relative z-10 w-full max-w-6xl mx-auto h-full flex flex-col items-center">
+        <div className="w-full flex items-start justify-between mb-3 px-3">
           <div>
-            <p className="uppercase tracking-[0.4em] text-pink-400 text-sm mb-3">
+            <p className="uppercase tracking-[0.45em] text-yellow-300 text-sm mb-3 drop-shadow-[0_0_12px_rgba(255,215,120,0.8)]">
               Un jardin rempli d’amour uniquement pour Nounours
             </p>
 
-            <h1 className="text-3xl md:text-6xl font-serif text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif text-white leading-tight">
               Livre des souvenirs 📖
             </h1>
           </div>
@@ -921,16 +950,16 @@ function MemoryBookModal({ messages, onClose }) {
           </button>
         </div>
 
-        <div className="flex justify-center overflow-hidden">
+        <div className="w-full flex justify-center overflow-hidden">
           <HTMLFlipBook
             key={`book-${bookVersion}`}
-            width={360}
-            height={460}
-            size="stretch"
-            minWidth={260}
-            maxWidth={620}
-            minHeight={360}
-            maxHeight={620}
+           width={280}
+height={400}
+size="stretch"
+minWidth={260}
+maxWidth={760}
+minHeight={380}
+maxHeight={520}
             showCover={true}
             useMouseEvents={false}
             clickEventForward={false}
@@ -959,7 +988,7 @@ function MemoryBookModal({ messages, onClose }) {
     repeat: Infinity,
     ease: "easeInOut",
   }}
-  className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-[0_0_35px_rgba(255,105,180,0.45)] mb-5 md:mb-8 mx-auto shrink-0"
+  className="relative z-10 w-24 h-24 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-pink-300 shadow-[0_0_35px_rgba(255,105,180,0.45)] mb-5 md:mb-8 mx-auto shrink-0"
 >
   <img
     src="/nounours-profile.jpg"
@@ -1023,13 +1052,25 @@ function MemoryBookModal({ messages, onClose }) {
                     <div className="absolute inset-0 bg-black/60" />
 
                     <div className="relative z-10 text-white p-6">
-                      <p className="uppercase tracking-[0.3em] text-pink-200 text-xs mb-4">
-                        Nouveau chapitre
-                      </p>
+                     
 
-                      <h2 className="text-5xl font-serif mb-6">
-                        Mon chapitre avec {page.message.name}
-                      </h2>
+   <h2
+  className="
+    text-3xl
+    md:text-5xl
+    italic
+    font-light
+    text-white
+    leading-tight
+    mb-6
+    drop-shadow-[0_4px_25px_rgba(0,0,0,0.8)]
+  "
+  style={{
+    fontFamily: "'Cormorant Garamond', serif",
+  }}
+>
+  Mon chapitre avec {page.message.name}
+</h2>
 
                       <p className="mb-8 text-white/80">
                         {page.message.relation}
@@ -1603,18 +1644,18 @@ function EternalMemoryGate({ onClose, audioRef }) {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute inset-0 z-60 flex items-center justify-center px-6"
+          className="absolute inset-0 z-60 flex justify-center px-4 py-6 overflow-y-auto"
         >
-          <div className="max-w-3xl text-center bg-black/15 border border-yellow-100/40 backdrop-blur-[2px] rounded-[2rem] p-8 md:p-12 shadow-[0_0_100px_rgba(255,255,255,0.35)]">
+          <div className="w-full max-w-6xl text-center bg-black/10 border border-yellow-100/30 backdrop-blur-[2px] rounded-[2rem] p-8 md:p-12 shadow-[0_0_100px_rgba(255,255,255,0.35)]">
             <p className="uppercase tracking-[0.5em] text-[#fff4b8] text-sm font-bold mb-6 drop-shadow-[0_0_18px_rgba(255,240,180,1)]">
               Lumière Éternelle
             </p>
 
-            <h1 className="text-7xl md:text-9xl font-serif text-white mb-10 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
+            <h1 className="text-4xl md:text-6xl font-serif text-white mb-6 drop-shadow-[0_0_45px_rgba(255,255,255,1)]">
               Ella 🕊️
             </h1>
 
-            <p className="text-white text-lg md:text-xl font-medium leading-relaxed whitespace-pre-line drop-shadow-[0_0_12px_rgba(0,0,0,1)]">
+            <p className="text-white text-base md:text-lg font-medium leading-relaxed whitespace-pre-wrap max-w-5xl mx-auto">
 {`Elvira…
 
 Certaines personnes deviennent
@@ -1873,11 +1914,11 @@ export default function MonUniversPage() {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            src="/nounours-bg.jpg"
-            alt="Nounours"
-            className="w-full h-full object-cover md:object-center object-top opacity-40"
-          />
+         <img
+  src="/elvira.jpg"
+  alt="Elvira"
+  className="w-full h-full object-cover md:object-center object-top opacity-40"
+/>
 
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
         </div>
@@ -1945,13 +1986,13 @@ export default function MonUniversPage() {
   />
     <main className="min-h-screen bg-black text-white overflow-hidden relative">
       <div className="absolute inset-0 z-0">
-        <img
-          src="/nounours-bg.jpg"
-          alt="Nounours"
-          className="w-full h-full object-cover opacity-55 scale-105"
-        />
+       <img
+  src="/elvira.jpg"
+  alt="Elvira"
+  className="w-full h-full object-cover opacity-55 scale-105"
+/>
 
-        <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px]" />
+        <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]" />
       </div>
 
       <FloatingButterflies />
