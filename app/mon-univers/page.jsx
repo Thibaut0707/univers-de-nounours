@@ -483,7 +483,16 @@ const messageScrollRef = useRef(null);
                       {media.type === "video" && (
                         <video
                           src={media.url}
-                          controls
+                           controls
+  onPlay={() => {
+    audioRef?.current?.pause();
+  }}
+  onPause={() => {
+    audioRef?.current?.play().catch(() => {});
+  }}
+  onEnded={() => {
+    audioRef?.current?.play().catch(() => {});
+  }}
                           className="rounded-2xl w-full max-w-2xl mx-auto max-h-[45vh] object-contain mb-4"
                         />
                       )}
@@ -644,7 +653,7 @@ function FinalMessageModal({ onClose }) {
         initial={{ opacity: 0, scale: 0.85, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="relative z-10 max-w-5xl w-full text-center bg-black/25 border border-white/15 backdrop-blur-[4px] rounded-[2rem] p-8 md:p-12 shadow-[0_0_35px_rgba(255,255,255,0.08)]"
+        className="relative z-10 w-full max-w-5xl max-h-[82vh] overflow-y-auto text-center bg-black/10 border border-white/15 backdrop-blur-[2px] rounded-[2rem] px-5 py-6 md:p-12 shadow-[0_0_35px_rgba(255,255,255,0.08)]"
       >
         <p className="uppercase tracking-[0.5em] text-pink-400 text-sm mb-8">
           Surprise finale
@@ -657,15 +666,31 @@ function FinalMessageModal({ onClose }) {
         <p className="text-zinc-200 text-lg leading-relaxed whitespace-pre-wrap mb-10">
 {`Tous ces papillons existent parce que tu es aimée.
 
-Chaque message, chaque souvenir, chaque photo et chaque vidéo est une preuve que tu comptes pour les personnes autour de toi.
+Derrière chaque mot, chaque souvenir, chaque photo et chaque vidéo se cache une personne qui a pensé à toi, qui a souri en se rappelant un moment partagé, et qui a voulu laisser une trace de son affection dans cet univers.
 
-Aujourd’hui, ce jardin est à toi.
+Cette app n'est pas seulement un cadeau.
+C'est la preuve que tu occupes une place unique dans le cœur de nombreuses personnes.
 
-Garde-le comme un endroit où revenir quand tu veux te rappeler à quel point tu es précieuse.
+Les jours où le doute viendra frapper à ta porte, reviens ici.
+Tourne ces pages.
+Relis ces souvenirs.
+Écoute les voix de ceux qui tiennent à toi.
 
-Les personnes pour qui tu compte,
+Tu découvriras alors quelque chose que le temps ne pourra jamais effacer :
+tu es importante,
+tu es précieuse,
+et tu es profondément aimée.
 
-Nous T'AIMONS trés trés fort Nounours ❤️`}
+Aujourd'hui, ce jardin est le tien.
+Prends-en soin comme d'un refuge rempli de lumière, de rires et d'amour.
+
+Et n'oublie jamais une chose, Nounours...
+
+Tu laisses dans la vie des autres une empreinte bien plus grande que tu ne l'imagines. ❤️🦋
+
+Nous t'aimons très fort.
+
+Joyeux anniversaire Moon. 🎂✨`}
         </p>
 
         <button
@@ -690,7 +715,7 @@ function playPageSound() {
 
 
 
-function MemoryBookModal({ messages, onClose }) {
+function MemoryBookModal({ messages, onClose, audioRef }) {
   const bookRef = useRef(null);
 
   const [openedChapters, setOpenedChapters] = useState({});
@@ -993,8 +1018,8 @@ maxHeight={520}
   <img
     src="/nounours-profile.jpg"
     alt="Nounours"
-    className="w-full h-full object-cover"
-  />
+     className="absolute inset-0 bg-black/10 backdrop-blur-[1px]" />
+  
 </motion.div>
 
     <div className="relative z-10">
@@ -1129,10 +1154,19 @@ maxHeight={520}
 
                     {page.media.type === "video" && (
                       <video
-                        src={page.media.url}
-                        controls
-                        className="rounded-2xl w-full max-h-[350px] mb-4"
-                      />
+  src={page.media.url}
+  controls
+  onPlay={() => {
+    audioRef?.current?.pause();
+  }}
+  onPause={() => {
+    audioRef?.current?.play().catch(() => {});
+  }}
+  onEnded={() => {
+    audioRef?.current?.play().catch(() => {});
+  }}
+  className="rounded-2xl w-full max-h-[350px] mb-4 shadow-xl"
+/>
                     )}
 
                     {page.media.type === "audio" && (
@@ -1151,7 +1185,7 @@ maxHeight={520}
 
                 {page.type === "chapter-end" && (
                   <div className="h-full flex flex-col justify-center items-center text-center">
-                    <div className="text-6xl mb-6">🦋</div>
+                    <div className="text-4xl mb-6">🦋</div>
 
                     <h2 className="text-4xl font-serif mb-5">
                       Fin du chapitre
@@ -1914,10 +1948,10 @@ export default function MonUniversPage() {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 relative overflow-hidden">
         <div className="absolute inset-0">
-         <img
+   <img
   src="/elvira.jpg"
-  alt="Elvira"
-  className="w-full h-full object-cover md:object-center object-top opacity-40"
+  alt="elvira"
+  className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"
 />
 
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
@@ -1986,10 +2020,10 @@ export default function MonUniversPage() {
   />
     <main className="min-h-screen bg-black text-white overflow-hidden relative">
       <div className="absolute inset-0 z-0">
-       <img
-  src="/elvira.jpg"
-  alt="Elvira"
-  className="w-full h-full object-cover opacity-55 scale-105"
+   <img
+  src="/Marie.jpg"
+  alt="Nounours"
+ className="w-full h-full object-cover object-top opacity-45 scale-100"
 />
 
         <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]" />
@@ -2208,10 +2242,14 @@ export default function MonUniversPage() {
 
       <AnimatePresence>
         {showMemoryBook && (
-          <MemoryBookModal
-            messages={messages}
-            onClose={() => setShowMemoryBook(false)}
-          />
+         <MemoryBookModal
+  messages={messages}
+  audioRef={audioRef}
+  onClose={() => {
+    audioRef?.current?.play().catch(() => {});
+    setShowMemoryBook(false);
+  }}
+/>
         )}
       </AnimatePresence>
 
