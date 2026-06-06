@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const BIRTHDAY_DATE = new Date("2026-06-14T21:00:00");
+const BIRTHDAY_DATE = new Date("2026-06-14T21:00:00-04:00");
 
 export default function HomePage() {
   const [timeLeft, setTimeLeft] = useState(null);

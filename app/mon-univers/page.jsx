@@ -401,9 +401,9 @@ const messageScrollRef = useRef(null);
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center px-4 md:px-6 overflow-hidden bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center px-3 overflow-hidden bg-black/70 backdrop-blur-sm"
     >
-      <div className="relative max-h-[92vh] overflow-y-auto bg-[#12051c]/95 border border-pink-300/15 backdrop-blur-xl rounded-[2.5rem] px-5 md:px-8 py-6 shadow-[0_0_60px_rgba(255,105,180,0.18)] w-full max-w-5xl">
+      <div className="relative w-[calc(100vw-24px)] max-w-[430px] h-[78vh] max-h-[720px] bg-[#12051c]/95 border border-pink-300/15 backdrop-blur-xl rounded-[2.5rem] px-5 py-6 shadow-[0_0_60px_rgba(255,105,180,0.18)] flex flex-col overflow-hidden mx-auto">
         <button
           onClick={onClose}
           className="fixed top-4 right-4 z-[9999] bg-black/80 border border-white/30 w-12 h-12 rounded-full text-white text-2xl flex items-center justify-center hover:scale-110 transition"
