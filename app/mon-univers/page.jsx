@@ -1748,22 +1748,22 @@ export default function MonUniversPage() {
   const introSteps = [
     {
       title: "Avant d’entrer...",
-      text: "Prends une seconde. Respire. Ce que tu vas découvrir a été créé uniquement pour toi Nounours🥰.",
+      text: "Prends une seconde. Respire. Ferme les yeux un instant et ouvre ton cœur. Derrière cette porte se cachent des souvenirs, des sourires et quelques morceaux de cœur. Tout ce que tu vas découvrir ici a été imaginé et créé uniquement pour toi, Nounours 🥰🥰.",
       emoji: "✨",
     },
     {
       title: "Quelque chose t’attend",
-      text: "Des personnes qui t’aiment ont laissé des fragments de souvenirs, de souhaits, de mots et d’amour uniquement pour toi.",
+      text: "Une porte. Quelques souvenirs. Beaucoup d'amour. Et une histoire qui ne peut être racontée qu’à une seule personne. Continuer ?",
       emoji: "🦋",
     },
     {
       title: "Un jardin secret",
-      text: "Chaque butterfly  que tu verras porte une histoire, une pensée ou une émotion...appuie dessus pour découvrir ce qu'il cache.",
+      text: "Chaque butterfly  que tu verras porte une histoire, Chacun d'eux veille sur un souvenir, un éclat de rire, une pensée, ou quelques mots laissés spécialement pour toi. Touche-les et laisse la magie opérer 🦋✨.",
       emoji: "🌙",
     },
     {
       title: "Es-tu prête ?",
-      text: "Quand tu appuieras sur le bouton, ton univers s’ouvrira.",
+      text: "Ton jardin secret t’attend. Les souvenirs sont en place. Les papillons sont réveillés.🦋 Il ne manque plus que toi. 🦋✨❤️.",
       emoji: "❤️",
     },
   ];
@@ -2070,7 +2070,7 @@ export default function MonUniversPage() {
             <div className="text-6xl mb-5">❤️</div>
 
             <h2 className="text-3xl font-serif mb-3">
-              Le cœur de Nounours
+              Un morceau de mon cœur ❤️
             </h2>
 
             <p className="text-pink-100">
