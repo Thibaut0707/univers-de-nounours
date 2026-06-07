@@ -1716,7 +1716,8 @@ elle continue d’exister un peu avec nous. ✨
 Et tant que son nom sera prononcé avec amour,
 sa lumière ne s’éteindra jamais.
 
-Ella 🕊️🤍`}
+Ella 🕊️🤍
+December 3, 2023`}
             </p>
 
             <button
@@ -1754,12 +1755,12 @@ export default function MonUniversPage() {
   const introSteps = [
     {
       title: "Avant d’entrer...",
-      text: "Prends une seconde. Respire. Ferme les yeux un instant et ouvre ton cœur. Derrière cette porte se cachent des souvenirs, des sourires et quelques morceaux de cœur. Tout ce que tu vas découvrir ici a été imaginé et créé uniquement pour toi, Nounours 🥰🥰.",
+      text: "Prends une seconde. 😇 Respire. Ferme les yeux un instant et ouvre ton cœur.❤️ Derrière cette porte se cachent des souvenirs, des sourires et quelques morceaux de cœur.🤭🎁 Tout ce que tu vas découvrir ici a été imaginé et créé uniquement pour toi, Nounours 🥰🥰.",
       emoji: "✨",
     },
     {
       title: "Quelque chose t’attend",
-      text: "Une porte. Quelques souvenirs. Beaucoup d'amour. Et une histoire qui ne peut être racontée qu’à une seule personne. Continuer ?",
+      text: "Une porte.🤔 Quelques souvenirs. Beaucoup d'amour.🥰 Et une histoire qui ne peut être racontée qu’à une seule personne.🤗 Continuer ?",
       emoji: "🦋",
     },
     {
