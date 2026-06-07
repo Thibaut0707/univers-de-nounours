@@ -1,0 +1,17 @@
+{
+  "name": "Univers de Nounours",
+  "short_name": "Nounours",
+  "description": "Un univers secret rempli de souvenirs pour Nounours.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#120018",
+  "theme_color": "#120018",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

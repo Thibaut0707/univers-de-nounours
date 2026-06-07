@@ -1,7 +1,8 @@
+import Script from "next/script";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import PwaRegister from "@/components/PwaRegister";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +29,15 @@ export default function RootLayout({
  return (
   <html lang="fr" suppressHydrationWarning>
     <body className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+
+      <Script id="register-sw" strategy="afterInteractive">
+  {`
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(function () {});
+    }
+  `}
+</Script>
       {children}
-      <PwaRegister />
     </body>
   </html>
 );
