@@ -20,7 +20,7 @@ import HTMLFlipBook from "react-pageflip";
 const TEMP_SECRET_CODE = "nounours2026";
 
 const nounoursMessage = {
-  relation: "Eternal Flame ❤️",
+  relation: "Eternal Flame ❤️‍🔥",
   name: "🥰Mon coin dans ton Univers🥰",
   message: `Nounours❤️,
 
@@ -39,15 +39,21 @@ Je voulais te créer quelque chose qui survive au temps.
 Un endroit où tu pourrais revenir les jours heureux comme les jours difficiles.
 Un endroit capable de te rappeler à quel point tu es aimée, importante et précieuse.
 
-Tu mérites un amour doux.
-Tu mérites des regards sincères.
-Tu mérites des gens qui choisissent de rester.
-Et surtout… tu mérites de ne jamais oublier la lumière que tu apportes dans la vie des autres.
+Tu as cette façon de laisser une trace dans le cœur des gens sans même t’en rendre compte.
+Par ton sourire, ta gentillesse, ta force et tout ce qui fait de toi la personne que tu es, tu apportes quelque chose de précieux autour de toi.
+Alors si un jour la vie te fait douter de toi, reviens ici.
+Relis ces mots et souviens-toi que tu es une personne exceptionnelle.
+Tu es une personne précieuse.
+Tu es une personne qui compte.
+Et tu laisses dans la vie des gens bien plus de lumière que tu ne l’imagines.
+Tu mérites de ne jamais oublier la lumière que tu apportes dans la vie des autres.
+Et tu mérites tout l’amour, le bonheur et la douceur que la vie peut offrir.
+Et surtout, n’oublie jamais que tu es profondément aimée.
 
 Alors bienvenue dans ton jardin secret.
 Bienvenue dans cet univers créé uniquement pour toi.
 
-Avec tout mon cœur,
+Avec tout mon amour,
 
 Eternal Flame ❤️❤️`,
 };
@@ -299,7 +305,7 @@ function MagicCursorTrail() {
   );
 }
 
-function TypewriterText({ text, speed = 45, scrollRef }) {
+function TypewriterText({ text, speed = 85, scrollRef }) {
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -321,7 +327,7 @@ function TypewriterText({ text, speed = 45, scrollRef }) {
         if (scrollRef?.current) {
           scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-      }, 20);
+      },40);
 
       index++;
 
@@ -401,9 +407,9 @@ const messageScrollRef = useRef(null);
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center px-3 overflow-hidden bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 md:px-6 overflow-hidden bg-black/70 backdrop-blur-sm"
     >
-      <div className="relative w-[calc(100vw-24px)] max-w-[430px] h-[78vh] max-h-[720px] bg-[#12051c]/95 border border-pink-300/15 backdrop-blur-xl rounded-[2.5rem] px-5 py-6 shadow-[0_0_60px_rgba(255,105,180,0.18)] flex flex-col overflow-hidden mx-auto">
+      <div className="relative max-h-[92vh] overflow-y-auto bg-[#12051c]/95 border border-pink-300/15 backdrop-blur-xl rounded-[2.5rem] px-5 md:px-8 py-6 shadow-[0_0_60px_rgba(255,105,180,0.18)] w-full max-w-5xl">
         <button
           onClick={onClose}
           className="fixed top-4 right-4 z-[9999] bg-black/80 border border-white/30 w-12 h-12 rounded-full text-white text-2xl flex items-center justify-center hover:scale-110 transition"
