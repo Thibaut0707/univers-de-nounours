@@ -18,7 +18,14 @@ export const metadata = {
   title: "Univers de Nounours",
   description: "Un univers secret rempli de souvenirs.",
   manifest: "/manifest.json",
-  themeColor: "#120018",
+
+
+  icons: {
+    icon: "/doudou.jpg",
+    apple: "/doudou.jpg",
+  },
+
+
 };
 
 export default function RootLayout({
