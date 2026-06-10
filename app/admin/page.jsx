@@ -18,7 +18,8 @@ export default function  AdminPage() {
 
   async function loadStats() {
     const snapshot = await getDocs(collection(db, "messages"));
-    const docs = snapshot.docs.map((doc) => doc.data());
+    const uniqueNames = [...new Set(docs.map((item) => item.nom))];
+setCount(uniqueNames.length);
 
     setCount(docs.length);
     setFamilyCount(docs.filter((item) => item.relation === "Famille").length);
