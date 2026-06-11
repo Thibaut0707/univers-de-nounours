@@ -28,7 +28,7 @@ export default function AdminPage() {
 
     setFamilyCount(
       data.filter((item) =>
-        ["Famille", "Frère", "Sœur", "Cousin", "Cousine", "Tante", "Oncle"].includes(
+        ["Famille", "Papa", "Maman", "Frère", "Sœur", "Cousin", "Cousine", "Tante", "Oncle", "Nièce","Neveux"].includes(
           item.relation
         )
       ).length
@@ -36,7 +36,7 @@ export default function AdminPage() {
 
     setFriendsCount(
       data.filter((item) =>
-        ["Ami(e)", "Meilleure ami(e)", "Collègue"].includes(item.relation)
+        ["Ami(e)", "Meilleure ami(e)","Connaissance", "Camarade", "Collègue"].includes(item.relation)
       ).length
     );
 
