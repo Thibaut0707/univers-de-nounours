@@ -6,7 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 const ADMIN_PASSWORD = "nounours-admin";
 
-export default function  AdminPage() {
+export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAllowed, setIsAllowed] = useState(false);
 
@@ -19,17 +19,32 @@ export default function  AdminPage() {
   async function loadStats() {
     const snapshot = await getDocs(collection(db, "messages"));
 
-const data = snapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-}));
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-setMessages(data);
-    setCount(docs.length);git 
-    setFamilyCount(docs.filter((item) => item.relation === "Famille").length);
-    setFriendsCount(docs.filter((item) => item.relation === "Ami(e)").length);
-    setParentsCount(docs.filter((item) => item.relation === "Parent").length);
-    setOtherCount(docs.filter((item) => item.relation === "Autre").length);
+    setCount(data.length);
+
+    setFamilyCount(
+      data.filter((item) =>
+        ["Famille", "Frère", "Sœur", "Cousin", "Cousine", "Tante", "Oncle"].includes(
+          item.relation
+        )
+      ).length
+    );
+
+    setFriendsCount(
+      data.filter((item) =>
+        ["Ami(e)", "Meilleure ami(e)", "Collègue"].includes(item.relation)
+      ).length
+    );
+
+    setParentsCount(
+      data.filter((item) => ["Maman", "Papa"].includes(item.relation)).length
+    );
+
+    setOtherCount(data.filter((item) => item.relation === "Autre").length);
   }
 
   useEffect(() => {
@@ -61,6 +76,7 @@ setMessages(data);
           />
 
           <button
+            type="button"
             onClick={() => {
               if (password === ADMIN_PASSWORD) {
                 setIsAllowed(true);
