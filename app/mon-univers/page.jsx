@@ -1315,7 +1315,11 @@ function MemoryGlobe({ messages, onOpenMessage }) {
             const angle1 = (index / messages.length) * Math.PI * 2;
             const angle2 = (nextIndex / messages.length) * Math.PI * 2;
 
-            const radius = 38;
+            const radius =
+  messages.length <= 12 ? 38 :
+  messages.length <= 20 ? 46 :
+  messages.length <= 30 ? 54 :
+  60;
 
             const x1 = 50 + Math.cos(angle1) * radius;
             const y1 = 50 + Math.sin(angle1) * radius;
