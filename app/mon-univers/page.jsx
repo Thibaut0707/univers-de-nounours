@@ -1367,9 +1367,9 @@ function MemoryGlobe({ messages, onOpenMessage }) {
           const angle = (index / messages.length) * Math.PI * 2;
           const radius =
   messages.length <= 12 ? 42 :
-  messages.length <= 20 ? 52 :
-  messages.length <= 30 ? 60 :
-  68;
+  messages.length <= 20 ? 50 :
+  messages.length <= 30 ? 58 :
+  66;
           const x = 50 + Math.cos(angle) * radius;
           const y = 50 + Math.sin(angle) * radius;
           const butterfly = getButterflyStyle(message.relation);
